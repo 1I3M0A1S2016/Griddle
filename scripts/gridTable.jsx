@@ -227,11 +227,6 @@ var GridTable = React.createClass({
           rowSettings={this.props.rowSettings}/>
       : undefined);
 
-    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
-    if (!anyHasChildren){
-      nodes = <tbody>{nodes}</tbody>
-    }
-
     var pagingContent = <tbody />;
     if(this.props.showPager){
       var pagingStyles = this.props.useGriddleStyles ?
