@@ -42,6 +42,7 @@
     "react-addons-test-utils": "0.14.3",
     "react-chartist": "~0.2.1",
     "react-dom": "0.14.3",
+    "react-tools": "^0.13.3",
     "underscore": "~1.6.0",
     "webpack": "1.12.3",
     "webpack-dev-server": "1.12.1"

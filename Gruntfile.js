@@ -63,7 +63,7 @@ module.exports = function(grunt) {
         // Files to perform replacements and includes with
         src: 'docs/src/**/*.md',
         // Destination directory to copy files to
-        dest: 'docs/dist/',
+        dest: 'docs/dist/'
       }
     },
     clean: {
@@ -87,7 +87,7 @@ module.exports = function(grunt) {
     webpack: {
       default: {
         entry: {
-          Griddle: ['./compiled/griddle.jsx'],
+          Griddle: ['./compiled/griddle.jsx']
         },
         output: {
           path: __dirname,
@@ -106,8 +106,7 @@ module.exports = function(grunt) {
         },
         externals: {
           "react": "React",
-          "underscore": "_",
-
+          "underscore": "_"
         }
       },
       docs: {
@@ -128,7 +127,7 @@ module.exports = function(grunt) {
         module: {
           loaders: [{
             test: /\.jsx?$/,
-            loader: 'babel',
+            loader: 'babel'
           }]
         },
         externals: {
@@ -170,9 +169,9 @@ module.exports = function(grunt) {
           spawn: false,
           interrupt: true,
           livereload: true
-        },
-      },
-    },
+        }
+      }
+    }
   });
 
   grunt.loadNpmTasks('grunt-open');
@@ -191,7 +190,7 @@ module.exports = function(grunt) {
       'build',
       'connect',
       'open',
-      'watch',
+      'watch'
     ]);
   });
 
@@ -209,7 +208,7 @@ module.exports = function(grunt) {
       'babel:dynamic_mappings',
       'clean:compiled'
     ]);
-  })
+  });
 
   // Default task(s).
   grunt.registerTask('default', ['serve']);
