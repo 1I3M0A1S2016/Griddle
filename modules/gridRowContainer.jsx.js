@@ -85,7 +85,7 @@ var GridRowContainer = React.createClass({
       children = that.props.hasChildren && this.props.data["children"].map(function (row, index) {
         if (typeof row["children"] !== "undefined") {
           var Griddle = require('./griddle.jsx');
-          return React.createElement('tr', { style: { paddingLeft: 5 } }, React.createElement('td', { colSpan: that.props.columnSettings.getVisibleColumnCount(), className: 'griddle-parent', style: that.props.useGriddleStyles ? { border: "none", "padding": "0 0 0 5px" } : null }, React.createElement(Griddle, { isSubGriddle: true, results: [row], columns: that.props.columnSettings.getColumns(), tableClassName: that.props.tableClassName, parentRowExpandedClassName: that.props.parentRowExpandedClassName,
+          return React.createElement('tr', { key: that.props.rowSettings.getRowKey(row), style: { paddingLeft: 5 } }, React.createElement('td', { colSpan: that.props.columnSettings.getVisibleColumnCount(), className: 'griddle-parent', style: that.props.useGriddleStyles ? { border: "none", "padding": "0 0 0 5px" } : null }, React.createElement(Griddle, { isSubGriddle: true, results: [row], columns: that.props.columnSettings.getColumns(), tableClassName: that.props.tableClassName, parentRowExpandedClassName: that.props.parentRowExpandedClassName,
             parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
             showTableHeading: false, showPager: false, columnMetadata: that.props.columnSettings.columnMetadata,
             parentRowExpandedComponent: that.props.parentRowExpandedComponent,

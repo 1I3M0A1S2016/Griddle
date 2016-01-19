@@ -10,15 +10,22 @@
             {
                 "id": 2,
                 "name": "Name 2",
-                "city": "Frankfurt"
+                "city": "Vienna",
+                "children": [
+                    {
+                        "id": 5,
+                        "name": "Name 5",
+                        "city": "Munich"
+                    }
+                ]
             }, {
                 "id": 3,
                 "name": "Name 3",
-                "city": "Frankfurt"
+                "city": "Ohio"
             }, {
                 "id": 4,
                 "name": "Name 4",
-                "city": "Frankfurt"
+                "city": "New York"
             }
         ]
     }, {
@@ -57,7 +64,7 @@
 
         render: function(){
             var rowMetadata = {
-                "key": "name"
+                "key": "id"
             };
 
             return (
