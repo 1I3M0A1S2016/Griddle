@@ -33,7 +33,8 @@ module.exports = function(config) {
       ]
     },
 
-    reporters: ['progress'],
+    //reporters: ['progress'],
+    reporters: ['mocha'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
@@ -46,7 +47,8 @@ module.exports = function(config) {
       'karma-webpack',
       'karma-babel-preprocessor',
       'karma-phantomjs-launcher',
-      'karma-chrome-launcher'
+      'karma-chrome-launcher',
+      'karma-mocha-reporter'
     ]
   });
 };
