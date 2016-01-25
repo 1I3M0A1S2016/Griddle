@@ -1,45 +1,30 @@
 /*
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
-var React = require('react');
-var _ = require('underscore');
-var ColumnProperties = require('./columnProperties.js');
-var deep = require('./deep.js');
+import React from 'react';
+import _ from 'underscore';
+import deep from './deep.js';
 
-var GridRow = React.createClass({
-    getDefaultProps: function(){
-      return {
-        "isChildRow": false,
-        "showChildren": false,
-        "data": {},
-        "columnSettings": null,
-        "rowSettings": null,
-        "hasChildren": false,
-        "useGriddleStyles": true,
-        "useGriddleIcons": true,
-        "isSubGriddle": false,
-        "paddingHeight": null,
-        "rowHeight": null,
-        "parentRowCollapsedClassName": "parent-row",
-        "parentRowExpandedClassName": "parent-row expanded",
-        "parentRowCollapsedComponent": "▶",
-        "parentRowExpandedComponent": "▼",
-        "onRowClick": null,
-	    "multipleSelectionSettings": null
-      }
-    },
-    handleClick: function(e){
-        if(this.props.onRowClick !== null && _.isFunction(this.props.onRowClick) ){
+class GridRow extends React.Component {
+    
+    constructor(props) {
+        super(props);        
+    }
+
+    handleClick(e) {
+        if (this.props.onRowClick !== null && _.isFunction(this.props.onRowClick)) {
             this.props.onRowClick(this, e);
-        }else if(this.props.hasChildren){
+        } else if (this.props.hasChildren) {
             this.props.toggleChildren();
         }
-    },
-    handleSelectionChange: function(e) {
+    }
+
+    handleSelectionChange (e) {
       //hack to get around warning that's not super useful in this case
       return;
-    },
-	handleSelectClick: function(e) {
+    }
+    
+	handleSelectClick (e) {
 		if(this.props.multipleSelectionSettings.isMultipleSelection) {
 			if(e.target.type === "checkbox") {
 				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.checked);
@@ -47,13 +32,15 @@ var GridRow = React.createClass({
 				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.checked)
 			}
 		}
-	},
-    verifyProps: function(){
+	}
+    
+    verifyProps (){
         if(this.props.columnSettings === null){
            console.error("gridRow: The columnSettings prop is null and it shouldn't be");
         }
-    },
-    render: function() {
+    }
+    
+    render () {
         this.verifyProps();
         var that = this;
         var columnStyles = null;
@@ -96,10 +83,10 @@ var GridRow = React.createClass({
 
             if (this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined"){
               var colData = (typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : <meta.customComponent data={col[1]} rowData={dataView} metadata={meta} />;
-              returnValue = (meta == null ? returnValue : <td onClick={this.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{colData}</td>);
+              returnValue = (meta == null ? returnValue : <td onClick={this.handleClick.bind(this)} className={meta.cssClassName} key={index} style={columnStyles}>{colData}</td>);
             }
 
-            return returnValue || (<td onClick={this.handleClick} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);
+            return returnValue || (<td onClick={this.handleClick.bind(this)} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);
         });
 
 		if(nodes && this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection) {
@@ -124,8 +111,30 @@ var GridRow = React.createClass({
         } else if (that.props.hasChildren){
             className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
         }
-        return (<tr onClick={this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick : null} className={className}>{nodes}</tr>);
+        return (<tr onClick={this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick.bind(this) : null} className={className}>{nodes}</tr>);
     }
-});
+};
 
-module.exports = GridRow;
+GridRow.propTypes = {};
+
+GridRow.defaultProps = {
+    "isChildRow": false,
+    "showChildren": false,
+    "data": {},
+    "columnSettings": null,
+    "rowSettings": null,
+    "hasChildren": false,
+    "useGriddleStyles": true,
+    "useGriddleIcons": true,
+    "isSubGriddle": false,
+    "paddingHeight": null,
+    "rowHeight": null,
+    "parentRowCollapsedClassName": "parent-row",
+    "parentRowExpandedClassName": "parent-row expanded",
+    "parentRowCollapsedComponent": "▶",
+    "parentRowExpandedComponent": "▼",
+    "onRowClick": null,
+    "multipleSelectionSettings": null
+};
+
+export default GridRow;
