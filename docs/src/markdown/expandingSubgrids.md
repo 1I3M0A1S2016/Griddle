@@ -48,7 +48,10 @@ render: function(){
             return (
                     <div>
                         <button onClick={this.addNewRow}>Add New Row</button>
-                        <Griddle results={fakeDataForKeys} columns={["name", "city"]} rowMetadata={rowMetadata} showFilter={true} />
+                        <Griddle results={fakeDataForKeys} columns={["name", "city"]} 
+                            rowMetadata={rowMetadata} 
+                            showFilter={true} 
+                            rowsExpandedByDefault={false} />
                     </div>
             );
         }

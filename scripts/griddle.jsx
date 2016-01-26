@@ -724,7 +724,8 @@ var Griddle = React.createClass({
                 externalLoadingComponent={this.props.externalLoadingComponent}
                 externalIsLoading={this.props.externalIsLoading}
                 hasMorePages={hasMorePages}
-                onRowClick={this.props.onRowClick}/></div>)
+                onRowClick={this.props.onRowClick}
+                rowsExpandedByDefault={this.props.rowsExpandedByDefault}/></div>)
     },
     getContentSection: function(data, cols, meta, pagingContent, hasMorePages, globalData){
         if(this.props.useCustomGridComponent && this.props.customGridComponent !== null){

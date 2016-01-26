@@ -300,10 +300,12 @@ describe('GridRow', function(){
 		var tr = TestUtils.findRenderedDOMComponentWithTag(row2, 'tr');
 		expect(tr.length).not.toBe(null);
 		var td = TestUtils.scryRenderedDOMComponentsWithTag(row2, 'td');
+		var spans = TestUtils.scryRenderedDOMComponentsWithTag(row2, 'span');
 		
 		expect(td.length).toBeGreaterThan(0);
-		var first = td[0];
 
+		// click on expander
+		var first = spans[0];
 		TestUtils.Simulate.click(first);
 
 		expect(mock.calls.count()).toEqual(1);
