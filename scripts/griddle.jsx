@@ -115,7 +115,8 @@ var Griddle = React.createClass({
             "previousIconComponent":"",
 			"isMultipleSelection": false, //currently does not support subgrids
             "selectedRowIds": [],
-			"uniqueIdentifier": "id"
+			"uniqueIdentifier": "id",
+            "rowsExpandedByDefault": true
         };
     },
     propTypes: {

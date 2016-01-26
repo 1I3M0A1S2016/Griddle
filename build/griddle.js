@@ -192,7 +192,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "previousIconComponent": "",
 	            "isMultipleSelection": false, //currently does not support subgrids
 	            "selectedRowIds": [],
-	            "uniqueIdentifier": "id"
+	            "uniqueIdentifier": "id",
+	            "rowsExpandedByDefault": true
 	        };
 	    },
 	    propTypes: {
@@ -1037,6 +1038,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                    var hasChildren = typeof row["children"] !== "undefined" && row["children"].length > 0;
 	                    var uniqueId = _this.props.rowSettings.getRowKey(row);
+	                    var showChildren = hasChildren && (_this.props.rowsExpandedByDefault === true && _this.state.expandedRows[uniqueId] !== false || _this.props.rowsExpandedByDefault === false && _this.state.expandedRows[uniqueId] === true);
 
 	                    var columns = _this.props.columnSettings.getColumns();
 
@@ -1050,7 +1052,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        rowSettings: _this.props.rowSettings,
 	                        hasChildren: hasChildren,
 	                        toggleChildren: _this.toggleChildren.bind(_this, uniqueId),
-	                        showChildren: _this.state.expandedRows[uniqueId],
+	                        showChildren: showChildren,
 	                        key: uniqueId,
 	                        useGriddleIcons: _this.props.useGriddleIcons,
 	                        parentRowExpandedClassName: _this.props.parentRowExpandedClassName,
@@ -1066,7 +1068,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }));
 
 	                    // At least one item in the group has children and row is expanded, continue with rendering of nested rows
-	                    if (hasChildren && _this.state.expandedRows[uniqueId]) {
+	                    /*
+	                    Nested rows should be rendered only in two cases:
+	                    - if rows are set to be expanded by default, render them if they are not explicitly collapsed
+	                    - if rows are set to be not expanded by default, render them only if they are explicitly expanded
+	                     */
+	                    if (showChildren) {
 	                        var children = row["children"];
 	                        nodesWithChildren.push(_this.getNodeContent(children, nestingLevel + 1));
 	                    }
@@ -1091,11 +1098,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'toggleChildren',
 	        value: function toggleChildren(key) {
-	            // get state of the component
-	            var state = this.state.expandedRows[key];
+	            // decide if component is expanded or not
+	            var isExpanded = this.state.expandedRows[key] || false;
 
-	            if (state) {
-	                delete this.state.expandedRows[key];
+	            if (this.props.rowsExpandedByDefault && this.state.expandedRows[key] !== false) {
+	                isExpanded = true;
+	            }
+
+	            if (isExpanded) {
+	                this.state.expandedRows[key] = false;
 	            } else {
 	                this.state.expandedRows[key] = true;
 	            }
@@ -1224,7 +1235,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    "parentRowExpandedComponent": "▼",
 	    "externalLoadingComponent": null,
 	    "externalIsLoading": false,
-	    "onRowClick": null
+	    "onRowClick": null,
+	    "rowsExpandedByDefault": true
 	};
 
 	exports['default'] = GridTable;
@@ -2100,7 +2112,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function handleClick(e) {
 	            if (this.props.onRowClick !== null && _underscore2['default'].isFunction(this.props.onRowClick)) {
 	                this.props.onRowClick(this, e);
-	            } else if (this.props.hasChildren) {
+	            }
+	        }
+	    }, {
+	        key: 'handleExpandRows',
+	        value: function handleExpandRows(e) {
+	            e.stopPropagation();
+	            if (this.props.hasChildren) {
 	                this.props.toggleChildren(this.props.key);
 	            }
 	        }
@@ -2168,7 +2186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                //todo: Make this not as ridiculous looking
 	                // add icon for expanding/collapsing
-	                var firstColAppend = index === 0 && _this.props.hasChildren && _this.props.showChildren === false && _this.props.useGriddleIcons ? _react2['default'].createElement('span', { style: expanderStyles }, _this.props.parentRowCollapsedComponent) : index === 0 && _this.props.hasChildren && _this.props.showChildren && _this.props.useGriddleIcons ? _react2['default'].createElement('span', { style: expanderStyles }, _this.props.parentRowExpandedComponent) : _react2['default'].createElement('span', { style: expanderStyles });
+	                var firstColAppend = index === 0 && _this.props.hasChildren && _this.props.showChildren === false && _this.props.useGriddleIcons ? _react2['default'].createElement('span', { onClick: _this.handleExpandRows.bind(_this), style: expanderStyles }, _this.props.parentRowCollapsedComponent) : index === 0 && _this.props.hasChildren && _this.props.showChildren && _this.props.useGriddleIcons ? _react2['default'].createElement('span', { onClick: _this.handleExpandRows.bind(_this), style: expanderStyles }, _this.props.parentRowExpandedComponent) : _react2['default'].createElement('span', { style: expanderStyles });
 
 	                if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined") {
 	                    var colData = typeof meta.customComponent === 'undefined' || meta.customComponent === null ? col[1] : _react2['default'].createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });

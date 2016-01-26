@@ -14,7 +14,12 @@ class GridRow extends React.Component {
     handleClick(e) {
         if (this.props.onRowClick !== null && _.isFunction(this.props.onRowClick)) {
             this.props.onRowClick(this, e);
-        } else if (this.props.hasChildren) {
+        }
+    }
+
+    handleExpandRows(e) {
+        e.stopPropagation();
+        if (this.props.hasChildren) {
             this.props.toggleChildren(this.props.key);
         }
     }
@@ -78,12 +83,12 @@ class GridRow extends React.Component {
             //todo: Make this not as ridiculous looking
             // add icon for expanding/collapsing
             let firstColAppend = (index === 0 && this.props.hasChildren && this.props.showChildren === false && this.props.useGriddleIcons) ?
-                <span style={expanderStyles}>
+                <span onClick={this.handleExpandRows.bind(this)} style={expanderStyles}>
                     {this.props.parentRowCollapsedComponent}
                 </span>
                 :
                 index === 0 && this.props.hasChildren && this.props.showChildren && this.props.useGriddleIcons ?
-                    <span style={expanderStyles}>
+                    <span onClick={this.handleExpandRows.bind(this)} style={expanderStyles}>
                         {this.props.parentRowExpandedComponent}
                     </span> : <span style={expanderStyles}></span>;
 

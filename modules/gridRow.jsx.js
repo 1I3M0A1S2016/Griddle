@@ -79,7 +79,13 @@ var GridRow = (function (_React$Component) {
         value: function handleClick(e) {
             if (this.props.onRowClick !== null && _underscore2['default'].isFunction(this.props.onRowClick)) {
                 this.props.onRowClick(this, e);
-            } else if (this.props.hasChildren) {
+            }
+        }
+    }, {
+        key: 'handleExpandRows',
+        value: function handleExpandRows(e) {
+            e.stopPropagation();
+            if (this.props.hasChildren) {
                 this.props.toggleChildren(this.props.key);
             }
         }
@@ -147,7 +153,7 @@ var GridRow = (function (_React$Component) {
 
                 //todo: Make this not as ridiculous looking
                 // add icon for expanding/collapsing
-                var firstColAppend = index === 0 && _this.props.hasChildren && _this.props.showChildren === false && _this.props.useGriddleIcons ? _react2['default'].createElement('span', { style: expanderStyles }, _this.props.parentRowCollapsedComponent) : index === 0 && _this.props.hasChildren && _this.props.showChildren && _this.props.useGriddleIcons ? _react2['default'].createElement('span', { style: expanderStyles }, _this.props.parentRowExpandedComponent) : _react2['default'].createElement('span', { style: expanderStyles });
+                var firstColAppend = index === 0 && _this.props.hasChildren && _this.props.showChildren === false && _this.props.useGriddleIcons ? _react2['default'].createElement('span', { onClick: _this.handleExpandRows.bind(_this), style: expanderStyles }, _this.props.parentRowCollapsedComponent) : index === 0 && _this.props.hasChildren && _this.props.showChildren && _this.props.useGriddleIcons ? _react2['default'].createElement('span', { onClick: _this.handleExpandRows.bind(_this), style: expanderStyles }, _this.props.parentRowExpandedComponent) : _react2['default'].createElement('span', { style: expanderStyles });
 
                 if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined") {
                     var colData = typeof meta.customComponent === 'undefined' || meta.customComponent === null ? col[1] : _react2['default'].createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });

@@ -108,6 +108,9 @@ class GridTable extends React.Component {
 
                 let hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
                 let uniqueId = this.props.rowSettings.getRowKey(row);
+                let showChildren = hasChildren &&
+                    ((this.props.rowsExpandedByDefault === true && this.state.expandedRows[uniqueId] !== false)
+                        || (this.props.rowsExpandedByDefault === false && this.state.expandedRows[uniqueId] === true));
 
                 var columns = this.props.columnSettings.getColumns();
 
@@ -123,7 +126,7 @@ class GridTable extends React.Component {
                         rowSettings={this.props.rowSettings}
                         hasChildren={hasChildren}
                         toggleChildren={this.toggleChildren.bind(this, uniqueId)}
-                        showChildren={this.state.expandedRows[uniqueId]}
+                        showChildren={showChildren}
                         key={uniqueId}
                         useGriddleIcons={this.props.useGriddleIcons}
                         parentRowExpandedClassName={this.props.parentRowExpandedClassName}
@@ -140,7 +143,12 @@ class GridTable extends React.Component {
                 );
 
                 // At least one item in the group has children and row is expanded, continue with rendering of nested rows
-                if (hasChildren && this.state.expandedRows[uniqueId]) {
+                /*
+                Nested rows should be rendered only in two cases:
+                - if rows are set to be expanded by default, render them if they are not explicitly collapsed
+                - if rows are set to be not expanded by default, render them only if they are explicitly expanded
+                 */
+                if (showChildren) {
                     let children = row["children"];
                     nodesWithChildren.push(this.getNodeContent(children, nestingLevel + 1));
                 }
@@ -165,11 +173,15 @@ class GridTable extends React.Component {
     }
 
     toggleChildren(key) {
-        // get state of the component
-        let state = this.state.expandedRows[key];
+        // decide if component is expanded or not
+        let isExpanded = this.state.expandedRows[key] || false;
 
-        if (state) {
-            delete(this.state.expandedRows[key]);
+        if (this.props.rowsExpandedByDefault && this.state.expandedRows[key] !== false) {
+            isExpanded = true;
+        }
+
+        if (isExpanded) {
+            this.state.expandedRows[key] = false;
         } else {
             this.state.expandedRows[key] = true;
         }
@@ -333,7 +345,8 @@ GridTable.defaultProps = {
     "parentRowExpandedComponent": "▼",
     "externalLoadingComponent": null,
     "externalIsLoading": false,
-    "onRowClick": null
+    "onRowClick": null,
+    "rowsExpandedByDefault": true
 };
 
 export default GridTable;

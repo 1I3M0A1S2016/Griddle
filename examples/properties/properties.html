@@ -426,6 +426,12 @@ var propertiesItem = [
     "description": "A function that should be called when a row has been clicked. The 'gridRow' and event will be passed in as arguments.",
     "type": "function",
     "default": "null"
+  },
+  {
+    "property": "rowsExpandedByDefault",
+    "description": "Specifies if rows should be expanded by default (in case they have children)",
+    "type": "bool",
+    "default": "true"
   }
 ];
 var DefinitionItem = React.createClass({
@@ -446,6 +452,6 @@ var DefinitionItem = React.createClass({
       </dl>
     )
   }
-})
+});
 ReactDOM.render(<Griddle results={propertiesItem} useCustomRowComponent={true} customRowComponent={DefinitionItem} useGriddleStyles={false} showFilter={true} tableClassName="table" resultsPerPage={100} columnMetadata={propertyGridMeta} showPager={false} enableToggleCustom={true}/>, document.getElementById('griddle-properties'));
 </script>
