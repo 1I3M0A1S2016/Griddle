@@ -61,10 +61,6 @@ var _columnPropertiesJs = require('./columnProperties.js');
 
 var _columnPropertiesJs2 = _interopRequireDefault(_columnPropertiesJs);
 
-var _nestedGridRowContainerJsx = require('./nestedGridRowContainer.jsx');
-
-var _nestedGridRowContainerJsx2 = _interopRequireDefault(_nestedGridRowContainerJsx);
-
 var GridRowContainer = (function (_React$Component) {
     _inherits(GridRowContainer, _React$Component);
 
@@ -107,10 +103,13 @@ var GridRowContainer = (function (_React$Component) {
         key: 'render',
         value: function render() {
             this.verifyProps();
+
             var that = this;
+
             if (typeof this.props.data === "undefined") {
                 return _react2['default'].createElement('tbody', null);
             }
+
             var arr = [];
 
             var columns = this.props.columnSettings.getColumns();
@@ -142,7 +141,28 @@ var GridRowContainer = (function (_React$Component) {
                 children = that.props.hasChildren && this.props.data["children"].map(function (row, index) {
                     if (typeof row["children"] !== "undefined") {
 
-                        return _react2['default'].createElement(_nestedGridRowContainerJsx2['default'], {
+                        //return <that.props.rowSettings.rowComponent
+                        //    useGriddleStyles={that.props.useGriddleStyles}
+                        //    isSubGriddle={true}
+                        //    data={row}
+                        //    rowData={row}
+                        //    columnSettings={that.props.columnSettings}
+                        //    rowSettings={that.props.rowSettings}
+                        //    hasChildren={true}
+                        //    toggleChildren={that.toggleChildren.bind(this)}
+                        //    showChildren={that.state.showChildren}
+                        //    key={that.props.rowSettings.getRowKey(row)}
+                        //    useGriddleIcons={that.props.useGriddleIcons}
+                        //    parentRowExpandedClassName={that.props.parentRowExpandedClassName}
+                        //    parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
+                        //    parentRowExpandedComponent={that.props.parentRowExpandedComponent}
+                        //    parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
+                        //    paddingHeight={that.props.paddingHeight}
+                        //    rowHeight={that.props.rowHeight}
+                        //    onRowClick={that.props.onRowClick}
+                        //    multipleSelectionSettings={that.props.multipleSelectionSettings}/>;
+
+                        return _react2['default'].createElement(NestedGridRowContainer, {
                             key: that.props.rowSettings.getRowKey(row),
                             rowData: row,
                             rowSettings: that.props.rowSettings,

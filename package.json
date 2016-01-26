@@ -60,5 +60,8 @@
   "bugs": {
     "url": "https://github.com/GriddleGriddle/Griddle/issues"
   },
-  "homepage": "https://github.com/GriddleGriddle/Griddle"
+  "homepage": "https://github.com/GriddleGriddle/Griddle",
+  "dependencies": {
+    "lodash.flattendeep": "^4.0.0"
+  }
 }
