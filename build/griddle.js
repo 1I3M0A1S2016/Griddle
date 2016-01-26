@@ -1039,10 +1039,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                    var hasChildren = typeof row["children"] !== "undefined" && row["children"].length > 0;
 	                    var uniqueId = _this.props.rowSettings.getRowKey(row);
-
 	                    var showChildren = hasChildren && (_this.props.rowsExpandedByDefault === true && _this.state.expandedRows[uniqueId] !== false || _this.props.rowsExpandedByDefault === false && _this.state.expandedRows[uniqueId] === true);
-
-	                    debugger;
 
 	                    var columns = _this.props.columnSettings.getColumns();
 
