@@ -42,6 +42,18 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.3.5
+
+- columnMetadata are now correctly updated in Griddle.componentWillReceiveProps. This was necessary for cases, where columnMetadata were loaded asynchronously, which not resulted in proper update (re-render).
+
+0.3.4
+
+- Refactored GridTable and GridRow to ES6 implementation
+- Refactored Rendering of the rows to avoid GridRowContainer complempletely (it was removed)
+- Changed behavior of row expanding. OnRowClick in now independent of expanding rows. Rows can be expanded by clicking on icon for expanding, instead of clicking on whole row. If you wish to expand rows by clicking anywhere in the row, you need to implement onRowClick.
+- Added new Griddle property "rowsExpandedByDefault". This is by default set to true, so if not overriden and table contains nested columns, these will be expanded by default.
+- Updated/fixed rendering of nested column offset. Only first column renders offset.
+
 0.3.0
 
 - Pulling the React 0.14 update into a larger version update to prevent npm from assuming it's safe to update.

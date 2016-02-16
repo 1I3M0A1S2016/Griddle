@@ -314,6 +314,9 @@ var Griddle = React.createClass({
                 selectedRowIds: nextProps.selectedRowIds
             });
         }
+
+        // update column metadata
+        this.columnSettings.columnMetadata = nextProps.columnMetadata;
     },
     getInitialState: function() {
         var state =  {

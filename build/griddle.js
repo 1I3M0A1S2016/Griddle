@@ -388,6 +388,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                selectedRowIds: nextProps.selectedRowIds
 	            });
 	        }
+
+	        // update column metadata
+	        this.columnSettings.columnMetadata = nextProps.columnMetadata;
 	    },
 	    getInitialState: function getInitialState() {
 	        var state = {
@@ -1460,7 +1463,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * lodash 4.0.0 (Custom Build) <https://lodash.com/>
+	 * lodash 4.1.0 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
 	 * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
 	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -1469,22 +1472,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	var baseFlatten = __webpack_require__(8);
 
+	/** Used as references for various `Number` constants. */
+	var INFINITY = 1 / 0;
+
 	/**
-	 * This method is like `_.flatten` except that it recursively flattens `array`.
+	 * Recursively flattens `array`.
 	 *
 	 * @static
 	 * @memberOf _
 	 * @category Array
-	 * @param {Array} array The array to recursively flatten.
+	 * @param {Array} array The array to flatten.
 	 * @returns {Array} Returns the new flattened array.
 	 * @example
 	 *
-	 * _.flattenDeep([1, [2, 3, [4]]]);
-	 * // => [1, 2, 3, 4]
+	 * _.flattenDeep([1, [2, [3, [4]], 5]]);
+	 * // => [1, 2, 3, 4, 5]
 	 */
 	function flattenDeep(array) {
 	  var length = array ? array.length : 0;
-	  return length ? baseFlatten(array, true) : [];
+	  return length ? baseFlatten(array, INFINITY) : [];
 	}
 
 	module.exports = flattenDeep;
@@ -1494,8 +1500,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 8 */
 /***/ function(module, exports) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {/**
-	 * lodash 4.0.0 (Custom Build) <https://lodash.com/>
+	/**
+	 * lodash 4.1.0 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
 	 * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
 	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -1531,7 +1537,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/** Used for built-in method references. */
-	var objectProto = global.Object.prototype;
+	var objectProto = Object.prototype;
 
 	/** Used to check objects for own properties. */
 	var hasOwnProperty = objectProto.hasOwnProperty;
@@ -1550,12 +1556,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @private
 	 * @param {Array} array The array to flatten.
-	 * @param {boolean} [isDeep] Specify a deep flatten.
+	 * @param {number} depth The maximum recursion depth.
 	 * @param {boolean} [isStrict] Restrict flattening to arrays-like objects.
 	 * @param {Array} [result=[]] The initial result value.
 	 * @returns {Array} Returns the new flattened array.
 	 */
-	function baseFlatten(array, isDeep, isStrict, result) {
+	function baseFlatten(array, depth, isStrict, result) {
 	  result || (result = []);
 
 	  var index = -1,
@@ -1563,11 +1569,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  while (++index < length) {
 	    var value = array[index];
-	    if (isArrayLikeObject(value) &&
+	    if (depth > 0 && isArrayLikeObject(value) &&
 	        (isStrict || isArray(value) || isArguments(value))) {
-	      if (isDeep) {
+	      if (depth > 1) {
 	        // Recursively flatten arrays (susceptible to call stack limits).
-	        baseFlatten(value, isDeep, isStrict, result);
+	        baseFlatten(value, depth - 1, isStrict, result);
 	      } else {
 	        arrayPush(result, value);
 	      }
@@ -1630,7 +1636,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @static
 	 * @memberOf _
-	 * @type Function
+	 * @type {Function}
 	 * @category Lang
 	 * @param {*} value The value to check.
 	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
@@ -1657,7 +1663,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @static
 	 * @memberOf _
-	 * @type Function
 	 * @category Lang
 	 * @param {*} value The value to check.
 	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
@@ -1686,7 +1691,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @static
 	 * @memberOf _
-	 * @type Function
 	 * @category Lang
 	 * @param {*} value The value to check.
 	 * @returns {boolean} Returns `true` if `value` is an array-like object, else `false`.
@@ -1757,7 +1761,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * // => false
 	 */
 	function isLength(value) {
-	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+	  return typeof value == 'number' &&
+	    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
 	}
 
 	/**
@@ -1784,8 +1789,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * // => false
 	 */
 	function isObject(value) {
-	  // Avoid a V8 JIT bug in Chrome 19-20.
-	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
 	  var type = typeof value;
 	  return !!value && (type == 'object' || type == 'function');
 	}
@@ -1819,7 +1822,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = baseFlatten;
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 /* 9 */
