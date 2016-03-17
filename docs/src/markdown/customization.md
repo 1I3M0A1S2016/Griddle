@@ -54,6 +54,15 @@ Griddle parses and evaluates the following columnMetadata object properties:
   <dd><strong>React Component</strong> - The component that should be rendered instead of the standard column data. This component will still be rendered inside of a `TD` element. (more information below in the [Custom Columns section](#customColumns).)</dd>
 </dl>
 
+<dl>
+   <dt>customHeaderComponent</dt>
+   <dd><strong>React Component</strong> - The component that should be rendered instead of the standard header data. This component will still be rendered inside of a `TH` element. (more information below in the [Custom Columns section](#customColumns).)</dd>
+ </dl>
+ <dl>
+   <dt>customHeaderComponentProps</dt>
+   <dd><strong>object</strong> - An object containing additional properties that will be passed into the custom header component. (more information below in the [Custom Columns section](#customColumns).)</dd>
+ </dl>
+ 
 However, you are also able to pass other properties in as columnMetadata.
 
 [columnMetadata can be accessed on the `metadata` property of a Custom Column component.](#custom-columns)
@@ -178,7 +187,33 @@ var LinkComponent = React.createClass({
 });
 ```
 
-From there, we will set the customComponent value in the **name** columnMetadata object to this LinkComponent.
+Additionally, we want the city and state column headers to be highlighted a specific color and have a filter by column input. We can define a custom header component as:
+
+```
+var HeaderComponent = React.createClass({
+  textOnClick: function(e) {
+    e.stopPropagation();
+  },
+
+  filterText: function(e) {
+    this.props.filterByColumn(e.target.value, this.props.columnName)
+  },
+
+ render: function(){
+   return (
+      <span>
+        <div><strong style={{color: this.props.color}}>{this.props.displayName}</strong></div>
+        <input type='text' onChange={this.filterText} onClick={this.textOnClick} />
+      </span>
+    );
+   }
+  });
+```
+  		  
+<small>Please note: filterByColumn is a method that is passed as a prop to any customHeaderComponent.</small>
+
+
+From there, we will set the customComponent value in the **name** columnMetadata object to this LinkComponent. We're also going to update **state** and **city**'s `customHeaderComponent` and `customHeaderComponentProps`.
 
 ```
 var columnMeta = [
@@ -190,6 +225,18 @@ var columnMeta = [
   "visible": true,
   "customComponent": LinkComponent
   },
+  {
+    ...
+    "columnName": "city",
+    "customHeaderComponent": HeaderComponent,
+    "customHeaderComponentProps": { color: 'red' }
+    },
+    {
+    ...
+    "columnName": "state",
+    "customHeaderComponent": HeaderComponent,
+    "customHeaderComponentProps": { color: 'blue' }
+    },
   ...
 ];
 ```
@@ -329,6 +376,66 @@ var TestLineChart = React.createClass({
 });
 ```
 @@include('./customization/testChart.html')
+
+<hr />
+
+###Custom Filtering and Filter Component###
+
+Griddle supports custom filtering and custom filter components. In order to use a custom filter function set the property `useCustomFilterer` to true and pass in a function to the  `customFilterer` property. To use a custom filter component set `useCustomFilterComponent` to true and pass a component to `customFilterComponent`.
+
+#####Example:#####
+
+This example shows how to make a custom filter component with a custom filter function that does a case-insensitive search through the items. The component must call `this.props.changeFilter(val)` when the filter should be updated. In the example below we pass a string but any variable type can be used as long as the filter function is expecting it, for example an advanced query could be passed in using an object. The filter function signature takes the items to be filtered and the query to filter them by.
+
+```javascript
+  var _ = require('underscore'),
+      squish = require('object-squish');
+
+  var customFilterFunction = function(items, query) {
+    return _.filter(items, (item) => {
+      var flat = squish(item);
+
+      for (var key in flat) {
+        if (String(flat[key]).toLowerCase().indexOf(query.toLowerCase()) >= 0) return true;
+      };
+      return false;
+    });
+  };
+
+  var customFilterComponent = React.createClass({
+    getDefaultProps: function() {
+      return {
+        "query": ""
+      }
+    },
+
+    searchChange: function(event) {
+      this.props.query = event.target.value;
+      this.props.changeFilter(this.props.query);
+    },
+
+    render: function() {
+      return (
+        <div className="filter-container">
+          <input type="text"
+                 name="search"
+                 placeholder="Search..."
+                 onChange={this.searchChange} />
+        </div>
+      )
+    }
+  });
+```
+
+Then initialize Griddle:
+
+```
+React.render(
+  <Griddle results={fakeData} showFilter={true}
+  useCustomFilterer={true} customFilterer={customFilterFunction}
+  useCustomFilterComponent={true} customFilterComponent={customFilterComponent}/>,
+  document.getElementById('griddle-metadata')
+```
 
 <hr />
 

@@ -212,6 +212,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return false;
 	        });
 	    },
+	    filterByColumnFilters: function filterByColumnFilters(columnFilters) {
+	        var filteredResults = Object.keys(columnFilters).reduce(function (previous, current) {
+	            return _.filter(previous, function (item) {
+	                if (deep.getAt(item, current || "").toString().toLowerCase().indexOf(columnFilters[current].toLowerCase()) >= 0) {
+	                    return true;
+	                }
+
+	                return false;
+	            });
+	        }, this.props.results);
+
+	        var newState = {
+	            columnFilters: columnFilters
+	        };
+
+	        if (columnFilters) {
+	            newState.filteredResults = filteredResults;
+	            newState.maxPage = this.getMaxPage(newState.filteredResults);
+	        } else if (this.state.filter) {
+	            newState.filteredResults = this.props.useCustomFilterer ? this.props.customFilterer(this.props.results, filter) : this.defaultFilter(this.props.results, filter);
+	        } else {
+	            newState.filteredResults = null;
+	        }
+
+	        this.setState(newState);
+	    },
+	    filterByColumn: function filterByColumn(filter, column) {
+	        var columnFilters = this.state.columnFilters;
+
+	        //if filter is "" remove it from the columnFilters object
+	        if (columnFilters.hasOwnProperty(column) && !filter) {
+	            columnFilters = _.omit(columnFilters, column);
+	        } else {
+	            var newObject = {};
+	            newObject[column] = filter;
+	            columnFilters = _.extend({}, columnFilters, newObject);
+	        }
+
+	        this.filterByColumnFilters(columnFilters);
+	    },
 	    /* if we have a filter display the max page and results accordingly */
 	    setFilter: function setFilter(filter) {
 	        if (this.props.useExternal) {
@@ -399,6 +439,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            filteredResults: null,
 	            filteredColumns: [],
 	            filter: "",
+	            //this sets the individual column filters
+	            columnFilters: {},
 	            resultsPerPage: this.props.resultsPerPage || 5,
 	            sortColumn: this.props.initialSort,
 	            sortAscending: this.props.initialSortAscending,
@@ -744,6 +786,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            rowSettings: this.rowSettings,
 	            sortSettings: sortProperties,
 	            multipleSelectionSettings: multipleSelectionProperties,
+	            filterByColumn: this.filterByColumn,
 	            isSubGriddle: this.props.isSubGriddle,
 	            useGriddleIcons: this.props.useGriddleIcons,
 	            useFixedLayout: this.props.useFixedLayout,
@@ -1178,6 +1221,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                sortSettings: this.props.sortSettings,
 	                multipleSelectionSettings: this.props.multipleSelectionSettings,
 	                columnSettings: this.props.columnSettings,
+	                filterByColumn: this.props.filterByColumn,
 	                rowSettings: this.props.rowSettings }) : undefined;
 
 	            var pagingContent = _react2['default'].createElement('tbody', null);
@@ -1228,6 +1272,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    "useFixedLayout": true,
 	    "paddingHeight": null,
 	    "rowHeight": null,
+	    "filterByColumn": null,
 	    "infiniteScrollLoadTreshold": null,
 	    "bodyHeight": null,
 	    "useGriddleStyles": true,
@@ -1251,13 +1296,31 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
-	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
-	*/
+	 See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
+	 */
 	'use strict';
+
+	var _extends = Object.assign || function (target) {
+	    for (var i = 1; i < arguments.length; i++) {
+	        var source = arguments[i];for (var key in source) {
+	            if (Object.prototype.hasOwnProperty.call(source, key)) {
+	                target[key] = source[key];
+	            }
+	        }
+	    }return target;
+	};
 
 	var React = __webpack_require__(2);
 	var _ = __webpack_require__(5);
 	var ColumnProperties = __webpack_require__(6);
+
+	var DefaultHeaderComponent = React.createClass({
+	    displayName: 'DefaultHeaderComponent',
+
+	    render: function render() {
+	        return React.createElement('span', null, this.props.displayName);
+	    }
+	});
 
 	var GridTitle = React.createClass({
 	    displayName: 'GridTitle',
@@ -1265,6 +1328,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    getDefaultProps: function getDefaultProps() {
 	        return {
 	            "columnSettings": null,
+	            "filterByColumn": function filterByColumn() {},
 	            "rowSettings": null,
 	            "sortSettings": null,
 	            "multipleSelectionSettings": null,
@@ -1277,8 +1341,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    componentWillMount: function componentWillMount() {
 	        this.verifyProps();
 	    },
-	    sort: function sort(event) {
-	        this.props.sortSettings.changeSort(event.target.dataset.title || event.target.parentElement.dataset.title);
+	    sort: function sort(column) {
+	        var that = this;
+	        return function (event) {
+	            that.props.sortSettings.changeSort(column);
+	        };
 	    },
 	    toggleSelectAll: function toggleSelectAll(event) {
 	        this.props.multipleSelectionSettings.toggleSelectAll();
@@ -1303,7 +1370,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var nodes = this.props.columnSettings.getColumns().map(function (col, index) {
 	            var columnSort = "";
-	            var sortComponent = that.props.sortSettings.sortDefaultComponent;
+	            var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
+	            var sortComponent = columnIsSortable ? that.props.sortSettings.sortDefaultComponent : null;
 
 	            if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending) {
 	                columnSort = that.props.sortSettings.sortAscendingClassName;
@@ -1314,8 +1382,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 
 	            var meta = that.props.columnSettings.getColumnMetadataByName(col);
-	            var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
 	            var displayName = that.props.columnSettings.getMetadataColumnProperty(col, "displayName", col);
+	            var HeaderComponent = that.props.columnSettings.getMetadataColumnProperty(col, "customHeaderComponent", DefaultHeaderComponent);
+	            var headerProps = that.props.columnSettings.getMetadataColumnProperty(col, "customHeaderComponentProps", {});
 
 	            columnSort = meta == null ? columnSort : (columnSort && columnSort + " " || columnSort) + that.props.columnSettings.getMetadataColumnProperty(col, "cssClassName", "");
 
@@ -1330,7 +1399,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                };
 	            }
 
-	            return React.createElement('th', { onClick: columnIsSortable ? that.sort : null, 'data-title': col, className: columnSort, key: displayName, style: titleStyles }, displayName, sortComponent);
+	            return React.createElement('th', { onClick: columnIsSortable ? that.sort(col) : null, 'data-title': col, className: columnSort, key: displayName, style: titleStyles }, React.createElement(HeaderComponent, _extends({ columnName: col, displayName: displayName, filterByColumn: that.props.filterByColumn }, headerProps)), sortComponent);
 	        });
 
 	        if (nodes && this.props.multipleSelectionSettings.isMultipleSelection) {
