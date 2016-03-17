@@ -1,11 +1,29 @@
 /*
-   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
-*/
+ See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
+ */
 'use strict';
+
+var _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+        var source = arguments[i];for (var key in source) {
+            if (Object.prototype.hasOwnProperty.call(source, key)) {
+                target[key] = source[key];
+            }
+        }
+    }return target;
+};
 
 var React = require('react');
 var _ = require('underscore');
 var ColumnProperties = require('./columnProperties.js');
+
+var DefaultHeaderComponent = React.createClass({
+    displayName: 'DefaultHeaderComponent',
+
+    render: function render() {
+        return React.createElement('span', null, this.props.displayName);
+    }
+});
 
 var GridTitle = React.createClass({
     displayName: 'GridTitle',
@@ -25,8 +43,11 @@ var GridTitle = React.createClass({
     componentWillMount: function componentWillMount() {
         this.verifyProps();
     },
-    sort: function sort(event) {
-        this.props.sortSettings.changeSort(event.target.dataset.title || event.target.parentElement.dataset.title);
+    sort: function sort(column) {
+        var that = this;
+        return function (event) {
+            that.props.sortSettings.changeSort(column);
+        };
     },
     toggleSelectAll: function toggleSelectAll(event) {
         this.props.multipleSelectionSettings.toggleSelectAll();
@@ -64,6 +85,8 @@ var GridTitle = React.createClass({
 
             var meta = that.props.columnSettings.getColumnMetadataByName(col);
             var displayName = that.props.columnSettings.getMetadataColumnProperty(col, "displayName", col);
+            var HeaderComponent = that.props.columnSettings.getMetadataColumnProperty(col, "customHeaderComponent", DefaultHeaderComponent);
+            var headerProps = that.props.columnSettings.getMetadataColumnProperty(col, "customHeaderComponentProps", {});
 
             columnSort = meta == null ? columnSort : (columnSort && columnSort + " " || columnSort) + that.props.columnSettings.getMetadataColumnProperty(col, "cssClassName", "");
 
@@ -78,7 +101,7 @@ var GridTitle = React.createClass({
                 };
             }
 
-            return React.createElement('th', { onClick: columnIsSortable ? that.sort : null, 'data-title': col, className: columnSort, key: displayName, style: titleStyles }, displayName, sortComponent);
+            return React.createElement('th', { onClick: columnIsSortable ? that.sort(col) : null, 'data-title': col, className: columnSort, key: displayName, style: titleStyles }, React.createElement(HeaderComponent, _extends({ columnName: col, displayName: displayName }, headerProps)), sortComponent);
         });
 
         if (nodes && this.props.multipleSelectionSettings.isMultipleSelection) {
