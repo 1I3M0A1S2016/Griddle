@@ -31,6 +31,7 @@ var GridTitle = React.createClass({
     getDefaultProps: function getDefaultProps() {
         return {
             "columnSettings": null,
+            "filterByColumn": function filterByColumn() {},
             "rowSettings": null,
             "sortSettings": null,
             "multipleSelectionSettings": null,
@@ -101,7 +102,7 @@ var GridTitle = React.createClass({
                 };
             }
 
-            return React.createElement('th', { onClick: columnIsSortable ? that.sort(col) : null, 'data-title': col, className: columnSort, key: displayName, style: titleStyles }, React.createElement(HeaderComponent, _extends({ columnName: col, displayName: displayName }, headerProps)), sortComponent);
+            return React.createElement('th', { onClick: columnIsSortable ? that.sort(col) : null, 'data-title': col, className: columnSort, key: displayName, style: titleStyles }, React.createElement(HeaderComponent, _extends({ columnName: col, displayName: displayName, filterByColumn: that.props.filterByColumn }, headerProps)), sortComponent);
         });
 
         if (nodes && this.props.multipleSelectionSettings.isMultipleSelection) {

@@ -318,6 +318,7 @@ var GridTable = (function (_React$Component) {
                 sortSettings: this.props.sortSettings,
                 multipleSelectionSettings: this.props.multipleSelectionSettings,
                 columnSettings: this.props.columnSettings,
+                filterByColumn: this.props.filterByColumn,
                 rowSettings: this.props.rowSettings }) : undefined;
 
             var pagingContent = _react2['default'].createElement('tbody', null);
@@ -368,6 +369,7 @@ GridTable.defaultProps = {
     "useFixedLayout": true,
     "paddingHeight": null,
     "rowHeight": null,
+    "filterByColumn": null,
     "infiniteScrollLoadTreshold": null,
     "bodyHeight": null,
     "useGriddleStyles": true,
