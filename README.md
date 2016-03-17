@@ -41,6 +41,15 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 
 ----------
 ###Changelog:###
+0.4.0
+This version contains merged functionality from original Griddle:
+- Bumped version to 0.4.0
+- Merged: Update docs regarding filterByColumn
+- Merged: addColumnFilters
+- Merged: customHeaderComponent
+- Merged: make non-sortable column default icon hidden
+- Merged: add docs for custom filter function and component
+
 
 0.3.5
 
