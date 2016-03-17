@@ -1300,7 +1300,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var nodes = this.props.columnSettings.getColumns().map(function (col, index) {
 	            var columnSort = "";
-	            var sortComponent = that.props.sortSettings.sortDefaultComponent;
+	            var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
+	            var sortComponent = columnIsSortable ? that.props.sortSettings.sortDefaultComponent : null;
 
 	            if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending) {
 	                columnSort = that.props.sortSettings.sortAscendingClassName;
@@ -1311,7 +1312,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 
 	            var meta = that.props.columnSettings.getColumnMetadataByName(col);
-	            var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
 	            var displayName = that.props.columnSettings.getMetadataColumnProperty(col, "displayName", col);
 
 	            columnSort = meta == null ? columnSort : (columnSort && columnSort + " " || columnSort) + that.props.columnSettings.getMetadataColumnProperty(col, "cssClassName", "");
