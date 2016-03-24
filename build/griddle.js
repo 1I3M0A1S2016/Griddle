@@ -323,7 +323,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var maxPage = this.getMaxPage(results);
 	        //re-render if we have new max page value
 	        if (this.state.maxPage !== maxPage) {
-	            this.setState({ page: 0, maxPage: maxPage, filteredColumns: this.columnSettings.filteredColumns });
+	            this.setState({ maxPage: maxPage, filteredColumns: this.columnSettings.filteredColumns });
 	        }
 	    },
 	    setPage: function setPage(number) {
@@ -450,6 +450,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 
 	        return state;
+	    },
+	    resetOrdering: function resetOrdering() {
+	        this.setState({
+	            sortColumn: this.props.initialSort,
+	            sortAscending: this.props.initialSortAscending
+	        });
 	    },
 	    componentWillMount: function componentWillMount() {
 	        this.verifyExternal();
@@ -731,7 +737,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    },
 	    getFilter: function getFilter() {
-	        return this.props.showFilter && this.props.useCustomGridComponent === false ? this.props.useCustomFilterComponent ? React.createElement(CustomFilterContainer, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText, customFilterComponent: this.props.customFilterComponent, results: this.props.results, currentResults: this.getCurrentResults() }) : React.createElement(GridFilter, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText }) : "";
+	        return this.props.showFilter && this.props.useCustomGridComponent === false ? this.props.useCustomFilterComponent ? React.createElement(CustomFilterContainer, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText, customFilterComponent: this.props.customFilterComponent, results: this.props.results, currentResults: this.getCurrentResults() }) : React.createElement(GridFilter, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText, value: this.state.filter }) : "";
 	    },
 	    getSettings: function getSettings() {
 	        return this.props.showSettings ? React.createElement('button', { type: 'button', className: this.props.settingsToggleClassName, onClick: this.toggleColumnChooser,
@@ -1570,7 +1576,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * lodash 4.1.0 (Custom Build) <https://lodash.com/>
+	 * lodash 4.1.1 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
 	 * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
 	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -1750,8 +1756,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * // => false
 	 */
 	function isArrayLike(value) {
-	  return value != null &&
-	    !(typeof value == 'function' && isFunction(value)) && isLength(getLength(value));
+	  return value != null && isLength(getLength(value)) && !isFunction(value);
 	}
 
 	/**
@@ -1799,8 +1804,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function isFunction(value) {
 	  // The use of `Object#toString` avoids issues with the `typeof` operator
-	  // in Safari 8 which returns 'object' for typed array constructors, and
-	  // PhantomJS 1.9 which returns 'function' for `NodeList` instances.
+	  // in Safari 8 which returns 'object' for typed array and weak map constructors,
+	  // and PhantomJS 1.9 which returns 'function' for `NodeList` instances.
 	  var tag = isObject(value) ? objectToString.call(value) : '';
 	  return tag == funcTag || tag == genTag;
 	}
@@ -1915,7 +1920,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.props.changeFilter(event.target.value);
 	    },
 	    render: function render() {
-	        return React.createElement("div", { className: "filter-container" }, React.createElement("input", { type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange }));
+	        return React.createElement("div", { className: "filter-container" }, React.createElement("input", { type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange, value: this.props.value }));
 	    }
 	});
 

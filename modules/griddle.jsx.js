@@ -260,7 +260,7 @@ var Griddle = React.createClass({
         var maxPage = this.getMaxPage(results);
         //re-render if we have new max page value
         if (this.state.maxPage !== maxPage) {
-            this.setState({ page: 0, maxPage: maxPage, filteredColumns: this.columnSettings.filteredColumns });
+            this.setState({ maxPage: maxPage, filteredColumns: this.columnSettings.filteredColumns });
         }
     },
     setPage: function setPage(number) {
@@ -387,6 +387,12 @@ var Griddle = React.createClass({
         };
 
         return state;
+    },
+    resetOrdering: function resetOrdering() {
+        this.setState({
+            sortColumn: this.props.initialSort,
+            sortAscending: this.props.initialSortAscending
+        });
     },
     componentWillMount: function componentWillMount() {
         this.verifyExternal();
@@ -668,7 +674,7 @@ var Griddle = React.createClass({
         };
     },
     getFilter: function getFilter() {
-        return this.props.showFilter && this.props.useCustomGridComponent === false ? this.props.useCustomFilterComponent ? React.createElement(CustomFilterContainer, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText, customFilterComponent: this.props.customFilterComponent, results: this.props.results, currentResults: this.getCurrentResults() }) : React.createElement(GridFilter, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText }) : "";
+        return this.props.showFilter && this.props.useCustomGridComponent === false ? this.props.useCustomFilterComponent ? React.createElement(CustomFilterContainer, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText, customFilterComponent: this.props.customFilterComponent, results: this.props.results, currentResults: this.getCurrentResults() }) : React.createElement(GridFilter, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText, value: this.state.filter }) : "";
     },
     getSettings: function getSettings() {
         return this.props.showSettings ? React.createElement('button', { type: 'button', className: this.props.settingsToggleClassName, onClick: this.toggleColumnChooser,

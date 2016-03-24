@@ -257,7 +257,7 @@ var Griddle = React.createClass({
         var maxPage = this.getMaxPage(results);
         //re-render if we have new max page value
         if (this.state.maxPage !== maxPage){
-          this.setState({page: 0, maxPage: maxPage, filteredColumns: this.columnSettings.filteredColumns });
+          this.setState({maxPage: maxPage, filteredColumns: this.columnSettings.filteredColumns });
         }
     },
     setPage: function(number) {
@@ -381,6 +381,12 @@ var Griddle = React.createClass({
         };
 
         return state;
+    },
+    resetOrdering: function () {
+        this.setState({
+            sortColumn: this.props.initialSort,
+            sortAscending: this.props.initialSortAscending
+        });
     },
     componentWillMount: function() {
         this.verifyExternal();
@@ -675,7 +681,7 @@ var Griddle = React.createClass({
      return ((this.props.showFilter && this.props.useCustomGridComponent === false) ?
         ( this.props.useCustomFilterComponent ?
          <CustomFilterContainer changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} customFilterComponent={this.props.customFilterComponent} results={this.props.results} currentResults={this.getCurrentResults()} /> :
-         <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} />) :
+         <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} value={this.state.filter} />) :
         "");
     },
     getSettings: function(){
