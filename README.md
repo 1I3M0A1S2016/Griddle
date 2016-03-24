@@ -41,6 +41,14 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 
 ----------
 ###Changelog:###
+0.4.1
+This version contains fixes to be able to add new records to end of the Griddle data, manually navigate to the last page and reset filters and ordering of the table.
+- Fixed setMaxPage: function no longer sets this.state.page, which conflicted with manually setting the page.
+- Added function resetOrdering.
+- Value of filter from griddle state object is now passed to the GridFilter, so it is updated, when setting filter programmatically.
+- Added examples of adding new records to the end of the table records, navigating to the last page and resetting of the ordering and filter.
+
+
 0.4.0
 This version contains merged functionality from original Griddle:
 - Bumped version to 0.4.0
