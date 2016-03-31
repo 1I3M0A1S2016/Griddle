@@ -193,7 +193,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "isMultipleSelection": false, //currently does not support subgrids
 	            "selectedRowIds": [],
 	            "uniqueIdentifier": "id",
-	            "rowsExpandedByDefault": true
+	            "rowsExpandedByDefault": true,
+	            "navigateToLastPageOnNewItem": false
 	        };
 	    },
 	    propTypes: {
@@ -431,6 +432,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // update column metadata
 	        this.columnSettings.columnMetadata = nextProps.columnMetadata;
+	    },
+
+	    componentDidUpdate: function componentDidUpdate(prevProps) {
+	        // if should navigate to last page on new item
+	        if (this.props.navigateToLastPageOnNewItem === true) {
+	            // check
+	            if (prevProps.results && prevProps.results.length > 0 && this.props.results && this.props.results.length > prevProps.results.length) {
+	                this.resetOrdering();
+	                this.setFilter("");
+	                this.setPage(this.getMaxPage(this.props.results) - 1);
+	            }
+	        }
 	    },
 	    getInitialState: function getInitialState() {
 	        var state = {
@@ -1538,7 +1551,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * lodash 4.1.0 (Custom Build) <https://lodash.com/>
+	 * lodash 4.1.1 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
 	 * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
 	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>

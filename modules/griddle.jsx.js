@@ -130,7 +130,8 @@ var Griddle = React.createClass({
             "isMultipleSelection": false, //currently does not support subgrids
             "selectedRowIds": [],
             "uniqueIdentifier": "id",
-            "rowsExpandedByDefault": true
+            "rowsExpandedByDefault": true,
+            "navigateToLastPageOnNewItem": false
         };
     },
     propTypes: {
@@ -368,6 +369,18 @@ var Griddle = React.createClass({
 
         // update column metadata
         this.columnSettings.columnMetadata = nextProps.columnMetadata;
+    },
+
+    componentDidUpdate: function componentDidUpdate(prevProps) {
+        // if should navigate to last page on new item
+        if (this.props.navigateToLastPageOnNewItem === true) {
+            // check
+            if (prevProps.results && prevProps.results.length > 0 && this.props.results && this.props.results.length > prevProps.results.length) {
+                this.resetOrdering();
+                this.setFilter("");
+                this.setPage(this.getMaxPage(this.props.results) - 1);
+            }
+        }
     },
     getInitialState: function getInitialState() {
         var state = {

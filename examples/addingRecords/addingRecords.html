@@ -2,43 +2,41 @@
 
 <script type="text/jsx">
 
-    var fakeDataForKeys = [{
-        "id": 0,
-        "name": "Name 0",
-        "city": "Kapowsin",
-        "children": [
-            {
-                "id": 2,
-                "name": "Name 2",
-                "city": "Vienna",
-                "children": [
-                    {
-                        "id": 5,
-                        "name": "Name 5",
-                        "city": "Munich"
-                    }
-                ]
-            }, {
-                "id": 3,
-                "name": "Name 3",
-                "city": "Ohio"
-            }, {
-                "id": 4,
-                "name": "Name 4",
-                "city": "New York"
-            }
-        ]
-    }, {
-        "id": 1,
-        "name": "Name 1",
-        "city": "Frankfurt"
-    }];
-
     var ExpandingGrid = React.createClass({
 
         getInitialState: function () {
             return {
-                data: fakeDataForKeys
+                data: [{
+                    "id": 0,
+                    "name": "Name 0",
+                    "city": "Kapowsin",
+                    "children": [
+                        {
+                            "id": 2,
+                            "name": "Name 2",
+                            "city": "Vienna",
+                            "children": [
+                                {
+                                    "id": 5,
+                                    "name": "Name 5",
+                                    "city": "Munich"
+                                }
+                            ]
+                        }, {
+                            "id": 3,
+                            "name": "Name 3",
+                            "city": "Ohio"
+                        }, {
+                            "id": 4,
+                            "name": "Name 4",
+                            "city": "New York"
+                        }
+                    ]
+                }, {
+                    "id": 1,
+                    "name": "Name 1",
+                    "city": "Frankfurt"
+                }]
             }
         },
 
@@ -46,41 +44,19 @@
             return Math.floor(Math.random() * (max - min + 1)) + min;
         },
 
-        /**
-         * Implementation of custom getMaxPage function - even though Griddle contains implementation of this function,
-         * if it is called from outside of the Griddle it does not provide correct result - reason is that at the moment of calling this action,
-         * object added to the collection is not yet rendered - griddle does not know about it yet.
-         * @param griddleRef - reference to Griddle component
-         * @param data - reference to data rendered in Griddle
-         */
-        getMaxPage: function (griddleRef, data) {
-            var totalResults = data.length;
-            var maxPage = Math.ceil(totalResults / griddleRef.state.resultsPerPage);
-            return maxPage;
-        },
-
         addNewRow: function() {
-            console.log("adding new row");
-
             var id = this.getRandomInt(1000, 5000);
 
-            fakeDataForKeys.push({
-                "id": id,
-                "name": "Name " + id,
-                "city": "City " + id
-            });
-
             this.setState({
-                data: fakeDataForKeys
+                // make sure to pass new object - if you just push to the original array,
+                // value will be passed via reference and Griddle can not compare this.props.results and
+                // prevProps.results - it will be always same object.
+                data: [...this.state.data].concat({
+                    "id": id,
+                    "name": "Name " + id,
+                    "city": "City " + id
+                })
             });
-
-            // Reseting of the ordering and filter
-            this.refs.griddle.resetOrdering();
-            this.refs.griddle.setFilter("");
-
-            // To navigate to last page, calculate maxPage and set the page for the griddle manually (first page is 0, so need to do maxPage -1)
-            var maxPage = this.getMaxPage(this.refs.griddle, fakeDataForKeys);
-            this.refs.griddle.setPage(maxPage -1 );
         },
 
         render: function(){
@@ -91,13 +67,18 @@
             return (
                     <div>
                         <button onClick={this.addNewRow}>Add New Row</button>
-                        <Griddle ref="griddle" results={fakeDataForKeys} columns={["name", "city"]} rowMetadata={rowMetadata} showFilter={true} rowsExpandedByDefault={false} />
+                        <Griddle ref="griddle"
+                                 results={this.state.data}
+                                 columns={["name", "city"]}
+                                 rowMetadata={rowMetadata}
+                                 showFilter={true}
+                                 rowsExpandedByDefault={false}
+                                 navigateToLastPageOnNewItem={true}
+                        />
                     </div>
             );
         }
     });
-
-
 
     ReactDOM.render(<ExpandingGrid />, document.getElementById("griddle-expandable"));
 </script>

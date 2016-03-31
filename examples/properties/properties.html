@@ -432,6 +432,12 @@ var propertiesItem = [
     "description": "Specifies if rows should be expanded by default (in case they have children)",
     "type": "bool",
     "default": "true"
+  },
+  {
+    "property": "navigateToLastPageOnNewItem",
+    "description": "Navigate to the last page any time, that new row is added to the griddle (checked simply by comparing number of rows). Except of navigation to last page, filter value and sorting is reset to default.",
+    "type": "bool",
+    "default": "false"
   }
 ];
 var DefinitionItem = React.createClass({
