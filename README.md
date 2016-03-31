@@ -41,7 +41,13 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 
 ----------
 ###Changelog:###
+
+0.4.2
+
+- added attribute "navigateToLastPageOnNewItem". By default it is set to false. If enabled, anytime new record is added to the Griddle, filters and sorting is reset and Griddle displays last page with new record.
+
 0.4.1
+
 This version contains fixes to be able to add new records to end of the Griddle data, manually navigate to the last page and reset filters and ordering of the table.
 - Fixed setMaxPage: function no longer sets this.state.page, which conflicted with manually setting the page.
 - Added function resetOrdering.
@@ -50,6 +56,7 @@ This version contains fixes to be able to add new records to end of the Griddle 
 
 
 0.4.0
+
 This version contains merged functionality from original Griddle:
 - Bumped version to 0.4.0
 - Merged: Update docs regarding filterByColumn
