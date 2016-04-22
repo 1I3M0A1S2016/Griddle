@@ -226,7 +226,8 @@ var GridTable = (function (_React$Component) {
                 });
 
                 if (this.props.showNoData) {
-                    nodes.push(_react2['default'].createElement('tr', { key: 'no-data-section' }, _react2['default'].createElement('td', null, this.props.noDataSection)));
+                    var colSpan = this.props.columnSettings.getVisibleColumnCount();
+                    nodes.push(_react2['default'].createElement('tr', { key: 'no-data-section' }, _react2['default'].createElement('td', { colSpan: colSpan }, this.props.noDataSection)));
                 }
 
                 // Add the spacer rows for nodes we're not rendering.
