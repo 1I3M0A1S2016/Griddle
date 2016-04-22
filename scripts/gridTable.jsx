@@ -156,6 +156,10 @@ class GridTable extends React.Component {
                 return nodesWithChildren;
             });
 
+            if (this.props.showNoData) {
+                nodes.push(<tr key="no-data-section"><td>{this.props.noDataSection}</td></tr>);
+            }
+
             // Add the spacer rows for nodes we're not rendering.
             if (aboveSpacerRow) {
                 nodes.unshift(aboveSpacerRow);

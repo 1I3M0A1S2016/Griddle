@@ -736,6 +736,9 @@ var Griddle = React.createClass({
     getStandardGridSection: function getStandardGridSection(data, cols, meta, pagingContent, hasMorePages) {
         var sortProperties = this.getSortObject();
         var multipleSelectionProperties = this.getMultipleSelectionObject();
+        // no data section
+        var showNoData = this.shouldShowNoDataSection(data);
+        var noDataSection = this.getNoDataSection();
 
         return React.createElement('div', { className: 'griddle-body' }, React.createElement(GridTable, { useGriddleStyles: this.props.useGriddleStyles,
             columnSettings: this.columnSettings,
@@ -766,7 +769,10 @@ var Griddle = React.createClass({
             externalIsLoading: this.props.externalIsLoading,
             hasMorePages: hasMorePages,
             onRowClick: this.props.onRowClick,
-            rowsExpandedByDefault: this.props.rowsExpandedByDefault }));
+            rowsExpandedByDefault: this.props.rowsExpandedByDefault,
+            noDataSection: noDataSection,
+            showNoData: showNoData
+        }));
     },
     getContentSection: function getContentSection(data, cols, meta, pagingContent, hasMorePages, globalData) {
         if (this.props.useCustomGridComponent && this.props.customGridComponent !== null) {
@@ -777,16 +783,11 @@ var Griddle = React.createClass({
             return this.getStandardGridSection(data, cols, meta, pagingContent, hasMorePages);
         }
     },
-    getNoDataSection: function getNoDataSection(gridClassName, topSection) {
-        var myReturn = null;
+    getNoDataSection: function getNoDataSection() {
         if (this.props.customNoDataComponent != null) {
-            myReturn = React.createElement('div', { className: gridClassName }, React.createElement(this.props.customNoDataComponent, null));
-
-            return myReturn;
+            return React.createElement('div', { className: this.props.noDataClassName }, React.createElement(this.props.customNoDataComponent, null));
         }
-
-        myReturn = React.createElement('div', { className: gridClassName }, topSection, React.createElement(GridNoData, { noDataMessage: this.props.noDataMessage }));
-        return myReturn;
+        return React.createElement(GridNoData, { noDataMessage: this.props.noDataMessage });
     },
     shouldShowNoDataSection: function shouldShowNoDataSection(results) {
         return this.props.useExternal === false && (typeof results === 'undefined' || results.length === 0) || this.props.useExternal === true && this.props.externalIsLoading === false && results.length === 0;
@@ -835,11 +836,6 @@ var Griddle = React.createClass({
         var gridClassName = this.props.gridClassName.length > 0 ? "griddle " + this.props.gridClassName : "griddle";
         //add custom to the class name so we can style it differently
         gridClassName += this.props.useCustomRowComponent ? " griddle-custom" : "";
-
-        if (this.shouldShowNoDataSection(results)) {
-            gridClassName += this.props.noDataClassName && this.props.noDataClassName.length > 0 ? " " + this.props.noDataClassName : "";
-            return this.getNoDataSection(gridClassName, topSection);
-        }
 
         return React.createElement('div', { className: gridClassName }, topSection, columnSelector, React.createElement('div', { className: 'griddle-container', style: this.props.useGriddleStyles && !this.props.isSubGriddle ? { border: "1px solid #DDD" } : null }, resultContent));
     }

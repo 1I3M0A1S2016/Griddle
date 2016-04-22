@@ -225,6 +225,10 @@ var GridTable = (function (_React$Component) {
                     return nodesWithChildren;
                 });
 
+                if (this.props.showNoData) {
+                    nodes.push(_react2['default'].createElement('tr', { key: 'no-data-section' }, _react2['default'].createElement('td', null, this.props.noDataSection)));
+                }
+
                 // Add the spacer rows for nodes we're not rendering.
                 if (aboveSpacerRow) {
                     nodes.unshift(aboveSpacerRow);
