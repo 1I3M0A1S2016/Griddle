@@ -140,7 +140,7 @@ var Griddle = React.createClass({
         uniqueIdentifier: React.PropTypes.string
     },
     defaultFilter: function defaultFilter(results, filter) {
-        var colMetadata = (that.columnSettings.columnMetadata || []).reduce(function (previous, current) {
+        var colMetadata = (this.columnSettings.columnMetadata || []).reduce(function (previous, current) {
             previous[current.columnName] = current;
             return previous;
         }, {});
