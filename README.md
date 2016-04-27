@@ -42,6 +42,9 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.4.6 
+- Fix search bug introduced by the previous release
+
 0.4.5 
 - Same release as 0.4.4
 - Included two missing files from the release (griddle.jsx.js and gridRow.jsx.js)
