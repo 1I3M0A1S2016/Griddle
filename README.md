@@ -42,6 +42,13 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.4.4
+- This release was only made because the griddle.js file was forgotten when doing 0.4.3 release
+- It Includes :
+- a. when griddle styles are turned off, add to every child row a class "child-row-{rowIndex}" to be able to make the identation by css rules
+- b. when we have nested JSON as data input to the grid, the available columns in the settings section were calculated by flattening the first row data in the result, thus leading to additional columns like User.Id, User.Name, User.IsActive etc. So we introduced an aditional grid property  called availableColumns from which the columns are computed. If it is not specified, they are computed by using the "columns" property of the griddle. If "columns" are not specified, then the columns are calculated the old way
+- c. when having nested JSONs as data or id columns on the basis of which we render a display value, the search does not work. So we introduced an aditional toFilterableString property of type function that can be passed via columnMetadata, which is returning the searchable value of the column data. It gets as parameters the data, rowData, columnName,rowIndex. Both global search and column search will use it if it is present. Otherwise the old search is performed.
+
 0.4.3
 - fixes to columnFiltering
 - customization of what is shown in settings
