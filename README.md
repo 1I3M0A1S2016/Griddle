@@ -42,6 +42,11 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.4.3
+- fixes to columnFiltering
+- customization of what is shown in settings
+- fixes to Griddle styles for rows
+
 0.4.2
 
 - added attribute "navigateToLastPageOnNewItem". By default it is set to false. If enabled, anytime new record is added to the Griddle, filters and sorting is reset and Griddle displays last page with new record.
