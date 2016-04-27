@@ -140,10 +140,16 @@ var Griddle = React.createClass({
         uniqueIdentifier: React.PropTypes.string
     },
     defaultFilter: function defaultFilter(results, filter) {
+        var colMetadata = (that.columnSettings.columnMetadata || []).reduce(function (previous, current) {
+            previous[current.columnName] = current;
+            return previous;
+        }, {});
+
         return _.filter(results, function (item) {
             var arr = deep.keys(item);
             for (var i = 0; i < arr.length; i++) {
-                if ((deep.getAt(item, arr[i]) || "").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0) {
+                var toFilterableStringFn = colMetadata[arr[i]] && colMetadata[arr[i]].toFilterableString;
+                if ((toFilterableStringFn ? toFilterableStringFn(item[arr[i]], item, arr[i]) : deep.getAt(item, arr[i]) || "").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0) {
                     return true;
                 }
             }
@@ -151,9 +157,14 @@ var Griddle = React.createClass({
         });
     },
     filterByColumnFilters: function filterByColumnFilters(columnFilters) {
-        var filteredResults = Object.keys(columnFilters).reduce(function (previous, current) {
+        var that = this;
+        var filteredResults = Object.keys(columnFilters).reduce(function (previous, current, index) {
             return _.filter(previous, function (item) {
-                if (deep.getAt(item, current || "").toString().toLowerCase().indexOf(columnFilters[current].toLowerCase()) >= 0) {
+                var currentColMetadata = _.find(that.columnSettings.columnMetadata || [], function (cm) {
+                    return cm.columnName == current;
+                });
+                var toFilterableStringFn = currentColMetadata && currentColMetadata.toFilterableString;
+                if ((toFilterableStringFn ? toFilterableStringFn(item[current], item, current, index) : deep.getAt(item, current || "")).toString().toLowerCase().indexOf(columnFilters[current].toLowerCase()) >= 0) {
                     return true;
                 }
 
@@ -411,7 +422,7 @@ var Griddle = React.createClass({
         this.verifyExternal();
         this.verifyCustom();
 
-        this.columnSettings = new ColumnProperties(this.props.results.length > 0 ? deep.keys(this.props.results[0]) : [], this.props.columns, this.props.childrenColumnName, this.props.columnMetadata, this.props.metadataColumns);
+        this.columnSettings = new ColumnProperties(this.props.availableColumns || this.props.columns || (this.props.results.length > 0 ? deep.keys(this.props.results[0]) : []), this.props.columns, this.props.childrenColumnName, this.props.columnMetadata, this.props.metadataColumns);
 
         this.rowSettings = new RowProperties(this.props.rowMetadata, this.props.useCustomTableRowComponent && this.props.customTableRowComponent ? this.props.customTableRowComponent : GridRow, this.props.useCustomTableRowComponent);
 
@@ -813,8 +824,11 @@ var Griddle = React.createClass({
 
         var meta = this.columnSettings.getMetadataColumns();
 
-        // Grab the column keys from the first results
-        keys = deep.keys(_.omit(results[0], meta));
+        /*
+        Previously, the list of columns was calculated by flattening the first item in the results, which was leading to
+        columns like User.Id , User.Name for nested JSONs like {Id: 1, User: {Id: 1, Name: "Some Username"}}
+        */
+        keys = this.props.availableColumns || this.props.columns ? _.omit(this.props.availableColumns || this.props.columns, meta) : deep.keys(_.omit(results[0], meta));
 
         // sort keys by order
         keys = this.columnSettings.orderColumns(keys);
