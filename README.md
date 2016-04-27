@@ -42,6 +42,10 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.4.5 
+- Same release as 0.4.4
+- Included two missing files from the release (griddle.jsx.js and gridRow.jsx.js)
+
 0.4.4
 - This release was only made because the griddle.js file was forgotten when doing 0.4.3 release
 - It Includes :
