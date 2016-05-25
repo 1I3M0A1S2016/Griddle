@@ -131,6 +131,7 @@ var Griddle = React.createClass({
             "selectedRowIds": [],
             "uniqueIdentifier": "id",
             "rowsExpandedByDefault": true,
+            "expandedRowsDictionary": undefined,
             "navigateToLastPageOnNewItem": false
         };
     },
@@ -781,6 +782,7 @@ var Griddle = React.createClass({
             hasMorePages: hasMorePages,
             onRowClick: this.props.onRowClick,
             rowsExpandedByDefault: this.props.rowsExpandedByDefault,
+            expandedRowsDictionary: this.props.expandedRowsDictionary,
             noDataSection: noDataSection,
             showNoData: showNoData
         }));
