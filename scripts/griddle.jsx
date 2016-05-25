@@ -117,6 +117,7 @@ var Griddle = React.createClass({
             "selectedRowIds": [],
 			"uniqueIdentifier": "id",
             "rowsExpandedByDefault": true,
+            "expandedRowsDictionary":undefined,
             "navigateToLastPageOnNewItem": false
         };
     },
@@ -346,7 +347,7 @@ var Griddle = React.createClass({
             var deepKeys = deep.keys(nextProps.results[0]);
 
             var is_same = (this.columnSettings.allColumns.length == deepKeys.length) && this.columnSettings.allColumns.every(function(element, index) {
-                return element === deepKeys[index]; 
+                return element === deepKeys[index];
             });
 
             if(!is_same) {
@@ -810,6 +811,7 @@ var Griddle = React.createClass({
                 hasMorePages={hasMorePages}
                 onRowClick={this.props.onRowClick}
                 rowsExpandedByDefault={this.props.rowsExpandedByDefault}
+                expandedRowsDictionary={this.props.expandedRowsDictionary}
                 noDataSection={noDataSection}
                 showNoData={showNoData}
         /></div>)
