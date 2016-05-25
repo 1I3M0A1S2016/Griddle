@@ -109,8 +109,13 @@ class GridTable extends React.Component {
                 let hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
                 let uniqueId = this.props.rowSettings.getRowKey(row);
                 let showChildren = hasChildren &&
-                    ((this.props.rowsExpandedByDefault === true && this.state.expandedRows[uniqueId] !== false)
-                        || (this.props.rowsExpandedByDefault === false && this.state.expandedRows[uniqueId] === true));
+                    (
+                      (!this.props.rowsExpandedByDefault && this.props.expandedRowsDictionary && this.props.expandedRowsDictionary[uniqueId] === true)
+                      ||
+                      (!this.props.expandedRowsDictionary && this.props.rowsExpandedByDefault === true  && this.state.expandedRows[uniqueId] !== false)
+                        ||
+                      (this.props.rowsExpandedByDefault === false && !this.props.expandedRowsDictionary && this.state.expandedRows[uniqueId] === true)
+                    );
 
                 var columns = this.props.columnSettings.getColumns();
 
