@@ -42,6 +42,10 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.4.7
+- Added expandedRowsDictionary property to the griddle. It has to have the format {rowKeyProperty: true/false}, where rowKeyProperty is the "key" property provided in rowMetadata of the griddle.
+- If provided, it will completely disregard the internal griddle state referring to the collapsed/expanded state of the rows. It will also ignore the rowsExpandedByDefault value.
+
 0.4.6 
 - Fix search bug introduced by the previous release
 
