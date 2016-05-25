@@ -182,7 +182,7 @@ var GridTable = (function (_React$Component) {
 
                     var hasChildren = typeof row["children"] !== "undefined" && row["children"].length > 0;
                     var uniqueId = _this.props.rowSettings.getRowKey(row);
-                    var showChildren = hasChildren && (_this.props.rowsExpandedByDefault === true && _this.state.expandedRows[uniqueId] !== false || _this.props.rowsExpandedByDefault === false && _this.state.expandedRows[uniqueId] === true);
+                    var showChildren = hasChildren && (!_this.props.rowsExpandedByDefault && _this.props.expandedRowsDictionary && _this.props.expandedRowsDictionary[uniqueId] === true || !_this.props.expandedRowsDictionary && _this.props.rowsExpandedByDefault === true && _this.state.expandedRows[uniqueId] !== false || _this.props.rowsExpandedByDefault === false && !_this.props.expandedRowsDictionary && _this.state.expandedRows[uniqueId] === true);
 
                     var columns = _this.props.columnSettings.getColumns();
 
