@@ -194,6 +194,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "selectedRowIds": [],
 	            "uniqueIdentifier": "id",
 	            "rowsExpandedByDefault": true,
+	            "expandedRowsDictionary": null,
 	            "navigateToLastPageOnNewItem": false
 	        };
 	    },
@@ -844,6 +845,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            hasMorePages: hasMorePages,
 	            onRowClick: this.props.onRowClick,
 	            rowsExpandedByDefault: this.props.rowsExpandedByDefault,
+	            expandedRowsDictionary: this.props.expandedRowsDictionary,
 	            noDataSection: noDataSection,
 	            showNoData: showNoData
 	        }));
@@ -1114,7 +1116,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                    var hasChildren = typeof row["children"] !== "undefined" && row["children"].length > 0;
 	                    var uniqueId = _this.props.rowSettings.getRowKey(row);
-	                    var showChildren = hasChildren && (_this.props.rowsExpandedByDefault === true && _this.state.expandedRows[uniqueId] !== false || _this.props.rowsExpandedByDefault === false && _this.state.expandedRows[uniqueId] === true);
+	                    var showChildren = hasChildren && (!_this.props.rowsExpandedByDefault && _this.props.expandedRowsDictionary && _this.props.expandedRowsDictionary[uniqueId] === true || !_this.props.expandedRowsDictionary && _this.props.rowsExpandedByDefault === true && _this.state.expandedRows[uniqueId] !== false || _this.props.rowsExpandedByDefault === false && !_this.props.expandedRowsDictionary && _this.state.expandedRows[uniqueId] === true);
 
 	                    var columns = _this.props.columnSettings.getColumns();
 
@@ -1605,7 +1607,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * lodash 4.2.0 (Custom Build) <https://lodash.com/>
+	 * lodash (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
 	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
 	 * Released under MIT license <https://lodash.com/license>
@@ -1695,7 +1697,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @private
 	 * @param {string} key The key of the property to get.
-	 * @returns {Function} Returns the new function.
+	 * @returns {Function} Returns the new accessor function.
 	 */
 	function baseProperty(key) {
 	  return function(object) {
@@ -1724,7 +1726,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {boolean} Returns `true` if `value` is flattenable, else `false`.
 	 */
 	function isFlattenable(value) {
-	  return isArrayLikeObject(value) && (isArray(value) || isArguments(value));
+	  return isArray(value) || isArguments(value);
 	}
 
 	/**
