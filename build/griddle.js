@@ -212,8 +212,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _.filter(results, function (item) {
 	            var arr = deep.keys(item);
 	            for (var i = 0; i < arr.length; i++) {
-	                var toDisplayValue = colMetadata[arr[i]] && colMetadata[arr[i]].toFilterableString;
-	                if ((toDisplayValue ? toDisplayValue(item[arr[i]], item, arr[i]) : deep.getAt(item, arr[i]) || "").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0) {
+	                var toDisplayValueFn = colMetadata[arr[i]] && colMetadata[arr[i]].toDisplayValue;
+	                if ((toDisplayValueFn ? toDisplayValueFn(item[arr[i]], item, arr[i]) : deep.getAt(item, arr[i]) || "").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0) {
 	                    return true;
 	                }
 	            }
@@ -227,8 +227,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var currentColMetadata = _.find(that.columnSettings.columnMetadata || [], function (cm) {
 	                    return cm.columnName == current;
 	                });
-	                var toDisplayValue = currentColMetadata && currentColMetadata.toFilterableString;
-	                if ((toDisplayValue ? toDisplayValue(item[current], item, current, index) : deep.getAt(item, current || "")).toString().toLowerCase().indexOf(columnFilters[current].toLowerCase()) >= 0) {
+	                var toDisplayValueFn = currentColMetadata && currentColMetadata.toDisplayValue;
+	                if ((toDisplayValueFn ? toDisplayValueFn(item[current], item, current, index) : deep.getAt(item, current || "")).toString().toLowerCase().indexOf(columnFilters[current].toLowerCase()) >= 0) {
 	                    return true;
 	                }
 
@@ -560,12 +560,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var columnMetadata = _.where(this.props.columnMetadata, { columnName: this.state.sortColumn });
 
 	            var sortProperty = columnMetadata.length > 0 && columnMetadata[0].hasOwnProperty("sortProperty") && columnMetadata[0]["sortProperty"] || null;
-	            var toDisplayValue = columnMetadata.length > 0 && columnMetadata[0].hasOwnProperty("toFilterableString") && columnMetadata[0]["toFilterableString"] || null;
+	            var toDisplayValueFn = columnMetadata.length > 0 && columnMetadata[0].hasOwnProperty("toDisplayValue") && columnMetadata[0]["toDisplayValue"] || null;
 
 	            data = _.sortBy(data, function (item, index) {
 	                var sortByValue = sortProperty ? deep.getAt(item, that.state.sortColumn || that.props.initialSort)[sortProperty] : deep.getAt(item, that.state.sortColumn || that.props.initialSort);
-	                if (toDisplayValue) {
-	                    sortByValue = toDisplayValue(sortByValue, item, that.state.sortColumn || that.props.initialSort, index);
+	                if (toDisplayValueFn) {
+	                    sortByValue = toDisplayValueFn(sortByValue, item, that.state.sortColumn || that.props.initialSort, index);
 	                }
 	                return sortByValue;
 	            });
