@@ -139,8 +139,8 @@ var Griddle = React.createClass({
       function(item) {
            var arr = deep.keys(item);
            for(var i = 0; i < arr.length; i++){
-              var toFilterableStringFn = colMetadata[arr[i]] && colMetadata[arr[i]].toFilterableString;
-              if ((toFilterableStringFn ? toFilterableStringFn(item[arr[i]], item, arr[i]) : (deep.getAt(item, arr[i])||"")).toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
+              var toDisplayValue = colMetadata[arr[i]] && colMetadata[arr[i]].toFilterableString;
+              if ((toDisplayValue ? toDisplayValue(item[arr[i]], item, arr[i]) : (deep.getAt(item, arr[i])||"")).toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
                return true;
               }
            }
@@ -156,8 +156,8 @@ var Griddle = React.createClass({
                     var currentColMetadata =  _.find(that.columnSettings.columnMetadata || [], function(cm){
                       return cm.columnName == current;
                     });
-                    var toFilterableStringFn = currentColMetadata && currentColMetadata.toFilterableString;
-                    if ((toFilterableStringFn ? toFilterableStringFn(item[current],item,current,index) :  deep.getAt(item, current || "")).toString().toLowerCase().indexOf(columnFilters[current].toLowerCase()) >= 0) {
+                    var toDisplayValue = currentColMetadata && currentColMetadata.toFilterableString;
+                    if ((toDisplayValue ? toDisplayValue(item[current],item,current,index) :  deep.getAt(item, current || "")).toString().toLowerCase().indexOf(columnFilters[current].toLowerCase()) >= 0) {
                         return true;
                     }
 
@@ -500,16 +500,22 @@ var Griddle = React.createClass({
     getDataForRender: function(data, cols, pageList){
         var that = this;
             //get the correct page size
-            if(this.state.sortColumn !== "" || this.props.initialSort !== ""){
-                var sortProperty = _.where(this.props.columnMetadata, {columnName: this.state.sortColumn});
-                sortProperty = (sortProperty.length > 0 && sortProperty[0].hasOwnProperty("sortProperty") && sortProperty[0]["sortProperty"]) || null;
+            if (this.state.sortColumn !== "" || this.props.initialSort !== "") {
+                var columnMetadata = _.where(this.props.columnMetadata, { columnName: this.state.sortColumn });
 
-                data = _.sortBy(data, function(item){
-                    return sortProperty ? deep.getAt( item, that.state.sortColumn||that.props.initialSort )[sortProperty] :
-                        deep.getAt( item, that.state.sortColumn||that.props.initialSort );
+                var sortProperty = (columnMetadata.length > 0 && columnMetadata[0].hasOwnProperty("sortProperty") && columnMetadata[0]["sortProperty"]) || null;
+                var toDisplayValue = (columnMetadata.length > 0 && columnMetadata[0].hasOwnProperty("toFilterableString") && columnMetadata[0]["toFilterableString"]) || null;
+
+                data = _.sortBy(data, function (item, index) {
+                    var sortByValue = sortProperty ? deep.getAt(item, that.state.sortColumn || that.props.initialSort)[sortProperty] :
+                        deep.getAt(item, that.state.sortColumn || that.props.initialSort);
+                    if (toDisplayValue) {
+                        sortByValue = toDisplayValue(sortByValue, item, that.state.sortColumn || that.props.initialSort, index);
+                    }
+                    return sortByValue;
                 });
 
-                if(this.state.sortAscending === false){
+                if (this.state.sortAscending === false) {
                     data.reverse();
                 }
             }
