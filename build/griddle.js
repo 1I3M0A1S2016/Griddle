@@ -195,7 +195,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "uniqueIdentifier": "id",
 	            "rowsExpandedByDefault": true,
 	            "expandedRowsDictionary": undefined,
-	            "navigateToLastPageOnNewItem": false
+	            "resetToLastPage": false,
+	            "resetToFirstPage": false
 	        };
 	    },
 	    propTypes: {
@@ -441,22 +442,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	                selectedRowIds: nextProps.selectedRowIds
 	            });
 	        }
+	        
+	        if (nextProps.resetToFirstPage) {
+	            this.setPage(0);
+	        }
+	        if (nextProps.resetToLastPage) {
+	            this.resetOrdering();
+	            var lastPage = this.getMaxPage(nextProps.results) - 1;
+	            this.setState({ page: lastPage });
+	        }	        
 
 	        // update column metadata
 	        this.columnSettings.columnMetadata = nextProps.columnMetadata;
 	    },
 
-	    componentDidUpdate: function componentDidUpdate(prevProps) {
-	        // if should navigate to last page on new item
-	        if (this.props.navigateToLastPageOnNewItem === true) {
-	            // check
-	            if (prevProps.results && prevProps.results.length > 0 && this.props.results && this.props.results.length > prevProps.results.length) {
-	                this.resetOrdering();
-	                this.setFilter("");
-	                this.setPage(this.getMaxPage(this.props.results) - 1);
-	            }
-	        }
-	    },
 	    getInitialState: function getInitialState() {
 	        var state = {
 	            maxPage: 0,
