@@ -82,17 +82,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var React = __webpack_require__(2);
 	var GridTable = __webpack_require__(3);
-	var GridFilter = __webpack_require__(9);
-	var GridPagination = __webpack_require__(10);
-	var GridSettings = __webpack_require__(11);
-	var GridNoData = __webpack_require__(12);
-	var GridRow = __webpack_require__(13);
-	var CustomRowComponentContainer = __webpack_require__(15);
-	var CustomPaginationContainer = __webpack_require__(16);
-	var CustomFilterContainer = __webpack_require__(17);
+	var GridFilter = __webpack_require__(8);
+	var GridPagination = __webpack_require__(9);
+	var GridSettings = __webpack_require__(10);
+	var GridNoData = __webpack_require__(11);
+	var GridRow = __webpack_require__(12);
+	var CustomRowComponentContainer = __webpack_require__(14);
+	var CustomPaginationContainer = __webpack_require__(15);
+	var CustomFilterContainer = __webpack_require__(16);
 	var ColumnProperties = __webpack_require__(6);
-	var RowProperties = __webpack_require__(18);
-	var deep = __webpack_require__(14);
+	var RowProperties = __webpack_require__(17);
+	var deep = __webpack_require__(13);
 	var _ = __webpack_require__(5);
 
 	var Griddle = React.createClass({
@@ -195,7 +195,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "uniqueIdentifier": "id",
 	            "rowsExpandedByDefault": true,
 	            "expandedRowsDictionary": undefined,
-	            "navigateToLastPageOnNewItem": false
+	            "resetToLastPage": false,
+	            "resetToFirstPage": false
 	        };
 	    },
 	    propTypes: {
@@ -442,21 +443,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 	        }
 
+	        if (nextProps.resetToFirstPage) {
+	            this.setPage(0);
+	        }
+	        if (nextProps.resetToLastPage) {
+	            this.resetOrdering();
+	            var lastPage = this.getMaxPage(nextProps.results) - 1;
+	            this.setState({ page: lastPage });
+	        }
+
 	        // update column metadata
 	        this.columnSettings.columnMetadata = nextProps.columnMetadata;
 	    },
 
-	    componentDidUpdate: function componentDidUpdate(prevProps) {
-	        // if should navigate to last page on new item
-	        if (this.props.navigateToLastPageOnNewItem === true) {
-	            // check
-	            if (prevProps.results && prevProps.results.length > 0 && this.props.results && this.props.results.length > prevProps.results.length) {
-	                this.resetOrdering();
-	                this.setFilter("");
-	                this.setPage(this.getMaxPage(this.props.results) - 1);
-	            }
-	        }
-	    },
 	    getInitialState: function getInitialState() {
 	        var state = {
 	            maxPage: 0,
@@ -1571,48 +1570,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * lodash 4.2.0 (Custom Build) <https://lodash.com/>
-	 * Build: `lodash modularize exports="npm" -o ./`
-	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
-	 * Released under MIT license <https://lodash.com/license>
-	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
-	 * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-	 */
-	var baseFlatten = __webpack_require__(8);
-
-	/** Used as references for various `Number` constants. */
-	var INFINITY = 1 / 0;
-
-	/**
-	 * Recursively flattens `array`.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 3.0.0
-	 * @category Array
-	 * @param {Array} array The array to flatten.
-	 * @returns {Array} Returns the new flattened array.
-	 * @example
-	 *
-	 * _.flattenDeep([1, [2, [3, [4]], 5]]);
-	 * // => [1, 2, 3, 4, 5]
-	 */
-	function flattenDeep(array) {
-	  var length = array ? array.length : 0;
-	  return length ? baseFlatten(array, INFINITY) : [];
-	}
-
-	module.exports = flattenDeep;
-
-
-/***/ },
-/* 8 */
 /***/ function(module, exports) {
 
-	/**
+	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * lodash (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
 	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
@@ -1622,12 +1582,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	/** Used as references for various `Number` constants. */
-	var MAX_SAFE_INTEGER = 9007199254740991;
+	var INFINITY = 1 / 0,
+	    MAX_SAFE_INTEGER = 9007199254740991;
 
 	/** `Object#toString` result references. */
 	var argsTag = '[object Arguments]',
 	    funcTag = '[object Function]',
 	    genTag = '[object GeneratorFunction]';
+
+	/** Detect free variable `global` from Node.js. */
+	var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+
+	/** Detect free variable `self`. */
+	var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+	/** Used as a reference to the global object. */
+	var root = freeGlobal || freeSelf || Function('return this')();
 
 	/**
 	 * Appends the elements of `values` to `array`.
@@ -1648,6 +1618,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return array;
 	}
 
+	/**
+	 * The base implementation of `_.property` without support for deep paths.
+	 *
+	 * @private
+	 * @param {string} key The key of the property to get.
+	 * @returns {Function} Returns the new accessor function.
+	 */
+	function baseProperty(key) {
+	  return function(object) {
+	    return object == null ? undefined : object[key];
+	  };
+	}
+
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
 
@@ -1662,7 +1645,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var objectToString = objectProto.toString;
 
 	/** Built-in value references. */
-	var propertyIsEnumerable = objectProto.propertyIsEnumerable;
+	var Symbol = root.Symbol,
+	    propertyIsEnumerable = objectProto.propertyIsEnumerable,
+	    spreadableSymbol = Symbol ? Symbol.isConcatSpreadable : undefined;
 
 	/**
 	 * The base implementation of `_.flatten` with support for restricting flattening.
@@ -1699,19 +1684,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
-	 * The base implementation of `_.property` without support for deep paths.
-	 *
-	 * @private
-	 * @param {string} key The key of the property to get.
-	 * @returns {Function} Returns the new accessor function.
-	 */
-	function baseProperty(key) {
-	  return function(object) {
-	    return object == null ? undefined : object[key];
-	  };
-	}
-
-	/**
 	 * Gets the "length" property value of `object`.
 	 *
 	 * **Note:** This function is used to avoid a
@@ -1732,7 +1704,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {boolean} Returns `true` if `value` is flattenable, else `false`.
 	 */
 	function isFlattenable(value) {
-	  return isArray(value) || isArguments(value);
+	  return isArray(value) || isArguments(value) ||
+	    !!(spreadableSymbol && value && value[spreadableSymbol])
+	}
+
+	/**
+	 * Recursively flattens `array`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 3.0.0
+	 * @category Array
+	 * @param {Array} array The array to flatten.
+	 * @returns {Array} Returns the new flattened array.
+	 * @example
+	 *
+	 * _.flattenDeep([1, [2, [3, [4]], 5]]);
+	 * // => [1, 2, 3, 4, 5]
+	 */
+	function flattenDeep(array) {
+	  var length = array ? array.length : 0;
+	  return length ? baseFlatten(array, INFINITY) : [];
 	}
 
 	/**
@@ -1743,7 +1735,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @since 0.1.0
 	 * @category Lang
 	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is correctly classified,
+	 * @returns {boolean} Returns `true` if `value` is an `arguments` object,
 	 *  else `false`.
 	 * @example
 	 *
@@ -1765,11 +1757,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @static
 	 * @memberOf _
 	 * @since 0.1.0
-	 * @type {Function}
 	 * @category Lang
 	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is correctly classified,
-	 *  else `false`.
+	 * @returns {boolean} Returns `true` if `value` is an array, else `false`.
 	 * @example
 	 *
 	 * _.isArray([1, 2, 3]);
@@ -1852,8 +1842,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @since 0.1.0
 	 * @category Lang
 	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is correctly classified,
-	 *  else `false`.
+	 * @returns {boolean} Returns `true` if `value` is a function, else `false`.
 	 * @example
 	 *
 	 * _.isFunction(_);
@@ -1960,11 +1949,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return !!value && typeof value == 'object';
 	}
 
-	module.exports = baseFlatten;
+	module.exports = flattenDeep;
 
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -1993,7 +1983,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridFilter;
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -2065,7 +2055,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridPagination;
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -2143,7 +2133,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridSettings;
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -2171,7 +2161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridNoData;
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -2237,7 +2227,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _underscore2 = _interopRequireDefault(_underscore);
 
-	var _deepJs = __webpack_require__(14);
+	var _deepJs = __webpack_require__(13);
 
 	var _deepJs2 = _interopRequireDefault(_deepJs);
 
@@ -2401,7 +2391,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2512,7 +2502,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -2558,7 +2548,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CustomRowComponentContainer;
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -2599,7 +2589,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CustomPaginationContainer;
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -2636,7 +2626,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CustomFilterContainer;
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
