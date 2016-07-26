@@ -42,6 +42,11 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.4.9
+- navigateToLastPageOnNewItem prop is removed
+- replaced with two flag props - resetToLastPage, resetToFirstPage
+- indicates that the paging should be reset to first or last page, when recieved and set as true
+
 0.4.8
 - sorting now takes into account a displayed data, via 'toDisplayValue' function, if provided in columnMetadata
 - filtering is now also using 'toDisplayValue' function, instead of now unsupported 'toFilterableString'
