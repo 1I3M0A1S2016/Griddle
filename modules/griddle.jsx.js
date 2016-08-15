@@ -366,10 +366,10 @@ var Griddle = React.createClass({
         } else if (this.columnSettings.allColumns.length > 0) {
             this.columnSettings.allColumns = [];
         }
-
-        if (nextProps.columns !== this.columnSettings.filteredColumns) {
-            this.columnSettings.filteredColumns = nextProps.columns;
-        }
+         /*Prevent losing the filtered columns state (in griddle settings) when setting the state in the parent component of the grid*/
+        //if (nextProps.columns !== this.columnSettings.filteredColumns) {
+        //  this.columnSettings.filteredColumns = nextProps.columns;
+       //}
 
         if (nextProps.selectedRowIds) {
             var visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true);
