@@ -359,10 +359,11 @@ var Griddle = React.createClass({
         {
             this.columnSettings.allColumns = [];
         }
-
-        if(nextProps.columns !== this.columnSettings.filteredColumns){
-            this.columnSettings.filteredColumns = nextProps.columns;
-        }
+	
+	/*Prevent reseting the filtered columns to the initial ones when setting the state in the parent component of the griddle*/
+        //if(nextProps.columns !== this.columnSettings.filteredColumns){
+        //    this.columnSettings.filteredColumns = nextProps.columns;
+        //}
 
 
         if(nextProps.selectedRowIds) {
