@@ -42,6 +42,9 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.5.0
+- Prevent losing the filtered columns state (in griddle settings) when setting the state in the parent component of the grid.
+
 0.4.9
 - navigateToLastPageOnNewItem prop is removed
 - replaced with two flag props - resetToLastPage, resetToFirstPage
