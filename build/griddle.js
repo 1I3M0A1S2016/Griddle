@@ -429,10 +429,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else if (this.columnSettings.allColumns.length > 0) {
 	            this.columnSettings.allColumns = [];
 	        }
-
-	        if (nextProps.columns !== this.columnSettings.filteredColumns) {
-	            this.columnSettings.filteredColumns = nextProps.columns;
-	        }
+		
+		/*Prevent reseting filtered columns in settings to the inital ones when setting the state in the parent component of the griddle*/
+	        //if (nextProps.columns !== this.columnSettings.filteredColumns) {
+	        //    this.columnSettings.filteredColumns = nextProps.columns;
+	        //}
 
 	        if (nextProps.selectedRowIds) {
 	            var visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true);
