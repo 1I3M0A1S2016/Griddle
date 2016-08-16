@@ -434,8 +434,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		/*Prevent reseting the filtered columns (in grid settings) to the initial ones when setting the state in the parent component of the griddle*/
 	        if(this.prevColumns.length !== (nextProps.columns || []).length || !_.isEqual(this.prevColumns.sort(),(nextProps.columns || []).sort()))
 	        {
-	            this.columnSettings.filteredColumns = nextProps.columns;
-	  	    this.prevColumns = nextProps.columns;
+	            this.columnSettings.filteredColumns = (nextProps.columns || []).slice();
+        	    this.prevColumns = (nextProps.columns || []).slice();
 	        }
 
 	        if (nextProps.selectedRowIds) {
