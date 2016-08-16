@@ -13,7 +13,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	var installedModules = {};
 
 /******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
+/******/ 	function __webpack_require__(moduleId) {pre
 
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
@@ -413,6 +413,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //Better reset the selection
 	        this._resetSelectedRows();
 	    },
+	    prevColumns: [],
 	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	        this.setMaxPage(nextProps.results);
 
@@ -430,10 +431,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.columnSettings.allColumns = [];
 	        }
 		
-		/*Prevent reseting filtered columns in settings to the inital ones when setting the state in the parent component of the griddle*/
-	        //if (nextProps.columns !== this.columnSettings.filteredColumns) {
-	        //    this.columnSettings.filteredColumns = nextProps.columns;
-	        //}
+		/*Prevent reseting the filtered columns (in grid settings) to the initial ones when setting the state in the parent component of the griddle*/
+	        if(this.prevColumns.length !== (nextProps.columns || []).length || !_.isEqual(this.prevColumns.sort(),(nextProps.columns || []).sort()))
+	        {
+	            this.columnSettings.filteredColumns = nextProps.columns;
+	  	    this.prevColumns = nextProps.columns;
+	        }
 
 	        if (nextProps.selectedRowIds) {
 	            var visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true);
