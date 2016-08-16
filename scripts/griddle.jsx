@@ -340,6 +340,7 @@ var Griddle = React.createClass({
 		//Better reset the selection
 		this._resetSelectedRows();
     },
+    prevColumns: [],
     componentWillReceiveProps: function(nextProps) {
         this.setMaxPage(nextProps.results);
 
@@ -360,10 +361,12 @@ var Griddle = React.createClass({
             this.columnSettings.allColumns = [];
         }
 	
-	/*Prevent reseting the filtered columns to the initial ones when setting the state in the parent component of the griddle*/
-        //if(nextProps.columns !== this.columnSettings.filteredColumns){
-        //    this.columnSettings.filteredColumns = nextProps.columns;
-        //}
+	/*Prevent reseting the filtered columns (in grid settings) to the initial ones when setting the state in the parent component of the griddle*/
+        if(this.prevColumns.length !== (nextProps.columns || []).length || !_.isEqual(this.prevColumns.sort(),(nextProps.columns || []).sort()))
+        {
+            this.columnSettings.filteredColumns = nextProps.columns;
+  	    this.prevColumns = nextProps.columns;
+        }
 
 
         if(nextProps.selectedRowIds) {
