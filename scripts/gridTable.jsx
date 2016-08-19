@@ -123,6 +123,7 @@ class GridTable extends React.Component {
                 nodesWithChildren.push(
 
                     <this.props.rowSettings.rowComponent
+                        shouldGriddleRowUpdate = {this.props.shouldGriddleRowUpdate}
                         useGriddleStyles={this.props.useGriddleStyles}
                         isSubGriddle={this.props.isSubGriddle}
                         data={row}
