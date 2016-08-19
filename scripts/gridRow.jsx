@@ -38,7 +38,12 @@ class GridRow extends React.Component {
             }
         }
     }
-
+   shouldComponentUpdate(nextRowProps, nextRowState){
+  			if(this.props.shouldGriddleRowUpdate){
+  				return this.props.shouldGriddleRowUpdate(this.props.data, nextRowProps.data);
+  			}
+  			return true;
+  		}
     _getColumnStyle() {
         return {
             margin: "0",
