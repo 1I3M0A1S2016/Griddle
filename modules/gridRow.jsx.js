@@ -119,6 +119,22 @@ var GridRow = (function (_React$Component) {
             };
         }
     }, {
+        key: 'shouldComponentUpdate',
+        value: function shouldComponentUpdate(nextRowProps, nextRowState) {
+            if (this.props.shouldGriddleRowUpdate) {
+                return this.props.shouldGriddleRowUpdate(this.props.data, nextRowProps.data);
+            }
+            return true;
+        }
+    },{
+        key: 'shouldComponentUpdate',
+        value: function shouldComponentUpdate(nextRowProps, nextRowState) {
+            if (this.props.shouldGriddleRowUpdate) {
+                return this.props.shouldGriddleRowUpdate(this.props.data, nextRowProps.data);
+            }
+            return true;
+        }
+    }, {
         key: 'render',
         value: function render() {
             var _this = this;
