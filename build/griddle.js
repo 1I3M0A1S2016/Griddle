@@ -485,6 +485,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            sortAscending: this.props.initialSortAscending
 	        });
 	    },
+	    componentWillUpdate: function componentWillUpdate(nextProps, nextState) {
+	        this.props.onGriddleWillUpdate && this.props.onGriddleWillUpdate((this.state.filteredColumns || []).slice(), (nextState.filteredColumns || []).slice());
+	    },
 	    componentWillMount: function componentWillMount() {
 	        this.verifyExternal();
 	        this.verifyCustom();
@@ -825,6 +828,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var noDataSection = this.getNoDataSection();
 
 	        return React.createElement('div', { className: 'griddle-body' }, React.createElement(GridTable, { useGriddleStyles: this.props.useGriddleStyles,
+            	    shouldGriddleRowUpdate: this.props.shouldGriddleRowUpdate,
 	            columnSettings: this.columnSettings,
 	            rowSettings: this.rowSettings,
 	            sortSettings: sortProperties,
@@ -1131,6 +1135,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                    // render rows directly - this could return one row or multiple rows
 	                    nodesWithChildren.push(_react2['default'].createElement(_this.props.rowSettings.rowComponent, {
+                        	shouldGriddleRowUpdate: _this.props.shouldGriddleRowUpdate,
 	                        useGriddleStyles: _this.props.useGriddleStyles,
 	                        isSubGriddle: _this.props.isSubGriddle,
 	                        data: row,
@@ -2296,6 +2301,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                borderTopColor: "#DDD",
 	                color: "#222"
 	            };
+	        }
+	    }, {
+	        key: 'shouldComponentUpdate',
+	        value: function shouldComponentUpdate(nextRowProps, nextRowState) {
+	            if (this.props.shouldGriddleRowUpdate) {
+	                return this.props.shouldGriddleRowUpdate(this.props.data, nextRowProps.data);
+	            }
+	            return true;
 	        }
 	    }, {
 	        key: 'render',
