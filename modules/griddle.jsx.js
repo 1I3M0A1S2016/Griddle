@@ -421,6 +421,9 @@ var Griddle = React.createClass({
             sortAscending: this.props.initialSortAscending
         });
     },
+    componentWillUpdate: function(nextProps, nextState){
+	this.props.onGriddleWillUpdate && this.props.onGriddleWillUpdate((this.state.filteredColumns || []).slice(), nextState.filteredColumns.slice());
+    },
     componentWillMount: function componentWillMount() {
         this.verifyExternal();
         this.verifyCustom();
@@ -761,6 +764,7 @@ var Griddle = React.createClass({
         var noDataSection = this.getNoDataSection();
 
         return React.createElement('div', { className: 'griddle-body' }, React.createElement(GridTable, { useGriddleStyles: this.props.useGriddleStyles,
+            shouldGriddleRowUpdate: this.props.shouldGriddleRowUpdate,
             columnSettings: this.columnSettings,
             rowSettings: this.rowSettings,
             sortSettings: sortProperties,
