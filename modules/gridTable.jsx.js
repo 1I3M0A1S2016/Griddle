@@ -188,6 +188,7 @@ var GridTable = (function (_React$Component) {
 
                     // render rows directly - this could return one row or multiple rows
                     nodesWithChildren.push(_react2['default'].createElement(_this.props.rowSettings.rowComponent, {
+                        shouldGriddleRowUpdate: _this.props.shouldGriddleRowUpdate,
                         useGriddleStyles: _this.props.useGriddleStyles,
                         isSubGriddle: _this.props.isSubGriddle,
                         data: row,
