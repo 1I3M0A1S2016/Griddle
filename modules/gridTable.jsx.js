@@ -327,7 +327,7 @@ var GridTable = (function (_React$Component) {
                 filterByColumn: this.props.filterByColumn,
                 rowSettings: this.props.rowSettings }) : undefined;
 
-            var pagingContent = _react2['default'].createElement('tbody', null);
+            var pagingContent = _react2['default'].createElement('div', null);
             if (this.props.showPager) {
                 var pagingStyles = this.props.useGriddleStyles ? {
                     padding: "0",
@@ -336,8 +336,7 @@ var GridTable = (function (_React$Component) {
                     color: "#222"
                 } : null;
 
-                pagingContent = _react2['default'].createElement('tbody', null, _react2['default'].createElement('tr', null, _react2['default'].createElement('td', { colSpan: this.props.multipleSelectionSettings.isMultipleSelection ? this.props.columnSettings.getVisibleColumnCount() + 1 : this.props.columnSettings.getVisibleColumnCount(),
-                    style: pagingStyles, className: 'footer-container' }, this.props.pagingContent)));
+                pagingContent = _react2['default'].createElement('div', { className: 'footer-container', style: pagingStyles }, this.props.pagingContent);
             }
 
             // If we have a fixed header, split into two tables.
@@ -346,10 +345,10 @@ var GridTable = (function (_React$Component) {
                     tableStyle.tableLayout = "fixed";
                 }
 
-                return _react2['default'].createElement('div', null, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading), _react2['default'].createElement('div', { ref: 'scrollable', onScroll: this.gridScroll.bind(this), style: gridStyle }, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, nodes, loadingContent, pagingContent)));
+                return _react2['default'].createElement('div', null, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading), _react2['default'].createElement('div', { ref: 'scrollable', className: 'griddle-table-wrapper', onScroll: this.gridScroll.bind(this), style: gridStyle }, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, nodes, loadingContent)), pagingContent);
             }
 
-            return _react2['default'].createElement('div', { ref: 'scrollable', onScroll: this.gridScroll.bind(this), style: gridStyle }, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading, nodes, loadingContent, pagingContent));
+            return _react2['default'].createElement('div', null, _react2['default'].createElement('div', { ref: 'scrollable', className: 'griddle-table-wrapper', onScroll: this.gridScroll.bind(this), style: gridStyle }, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading, nodes, loadingContent)), pagingContent);
         }
     }]);
 
