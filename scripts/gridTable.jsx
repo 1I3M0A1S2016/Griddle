@@ -275,7 +275,7 @@ class GridTable extends React.Component {
                        rowSettings={this.props.rowSettings}/>
             : undefined);
 
-        let pagingContent = <tbody />;
+        let pagingContent = <div />;
         if (this.props.showPager) {
             let pagingStyles = this.props.useGriddleStyles ? {
                 padding: "0",
@@ -284,16 +284,9 @@ class GridTable extends React.Component {
                 color: "#222"
             } : null;
 
-            pagingContent = (
-                <tbody>
-                <tr>
-                    <td colSpan={this.props.multipleSelectionSettings.isMultipleSelection ? this.props.columnSettings.getVisibleColumnCount() + 1 : this.props.columnSettings.getVisibleColumnCount()}
-                        style={pagingStyles} className="footer-container">
-                        {this.props.pagingContent}
-                    </td>
-                </tr>
-                </tbody>
-            )
+            pagingContent = (<div className="footer-container" style={pagingStyles}>
+              {this.props.pagingContent}
+            </div>);
         }
 
         // If we have a fixed header, split into two tables.
@@ -306,24 +299,26 @@ class GridTable extends React.Component {
                 <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
                     {tableHeading}
                 </table>
-                <div ref="scrollable" onScroll={this.gridScroll.bind(this)} style={gridStyle}>
+                <div ref="scrollable" className="griddle-table-wrapper" onScroll={this.gridScroll.bind(this)} style={gridStyle}>
                     <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
                         {nodes}
                         {loadingContent}
-                        {pagingContent}
                     </table>
                 </div>
+                {pagingContent}
             </div>;
         }
 
-        return <div ref="scrollable" onScroll={this.gridScroll.bind(this)} style={gridStyle}>
-            <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
-                {tableHeading}
-                {nodes}
-                {loadingContent}
-                {pagingContent}
-            </table>
-        </div>
+        return <div>
+          <div ref="scrollable" className="griddle-table-wrapper" onScroll={this.gridScroll.bind(this)} style={gridStyle}>
+              <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
+                  {tableHeading}
+                  {nodes}
+                  {loadingContent}
+              </table>
+          </div>
+          {pagingContent}
+        </div>;
     }
 }
 
