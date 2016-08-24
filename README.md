@@ -42,6 +42,9 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.5.3
+- Moved grid footer outside the table in a separate div
+
 0.5.2
 - Add component lifecycle hooks to handle shouldComponentUpdate outside the griddle (gridRow & column custom components)
 
