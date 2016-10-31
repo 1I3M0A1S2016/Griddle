@@ -24,18 +24,47 @@ class GridTable extends React.Component {
         this.gridScroll();
     }
 
+    componentWillMount(){
+        this.gridId = (this.props.gridId !== undefined ? this.props.gridId : new Date().getTime()).toString();
+    }
+
     componentDidUpdate(prevProps, prevState) {
         // After the subsequent renders, see if we need to load additional pages.
         this.gridScroll();
     }
 
-    gridScroll() {
+    componentWillReceiveProps(nextProps){
+        if(this.props.bodyScrolling){
+                if(
+                     nextProps.bodyHeight !== this.props.bodyHeight 
+                     || nextProps.bodyScrollTop !== this.props.bodyScrollTop
+                     || nextProps.bodyClientHeight !== this.props.bodyClientHeight
+                     || nextProps.bodyScrollHeight !== this.props.bodyScrollHeight
+                     || nextProps.aboveGridContentHeight !== this.props.aboveGridContentHeight
+                     || nextProps.underGridContentHeight !== this.props.underGridContentHeight){
+                    this.gridScroll(nextProps);
+                }
+            }
+    } 
+ 
+    gridScroll(nextProps) {
         if (this.props.enableInfiniteScroll && !this.props.externalIsLoading) {
             // If the scroll height is greater than the current amount of rows displayed, update the page.
             var scrollable = this.refs.scrollable;
-            var scrollTop = scrollable.scrollTop;
-            var scrollHeight = scrollable.scrollHeight;
-            var clientHeight = scrollable.clientHeight;
+            var scrollTop;
+            var scrollHeight;
+            var clientHeight;
+            
+            if(this.props.bodyScrolling) {
+                    scrollTop = nextProps ? nextProps.bodyScrollTop :((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop || 0);
+                    scrollHeight = nextProps ? nextProps.bodyScrollHeight : ((document.documentElement && document.documentElement.scrollHeight) || document.body.scrollHeight || 0);
+                    clientHeight = nextProps ? nextProps.bodyClientHeight : ((document.documentElement && document.documentElement.clientHeight) || document.body.clientHeight || 0);
+            }
+            else{
+                scrollTop = scrollable.scrollTop;
+                scrollHeight = scrollable.scrollHeight;
+                clientHeight = scrollable.clientHeight;
+            }
 
             // If the scroll position changed and the difference is greater than a row height
             if (this.props.rowHeight !== null &&
@@ -78,17 +107,24 @@ class GridTable extends React.Component {
 
         // If the data is still being loaded, don't build the nodes unless this is an infinite scroll table.
         if (!this.props.externalIsLoading || this.props.enableInfiniteScroll) {
-            //let nodeData = this.props.data;
+             //let nodeData = this.props.data;
             let aboveSpacerRow = null;
             let belowSpacerRow = null;
+            let scrollable = this.props.bodyScrolling  ? document.body : this.refs.scrollable;
 
             // If we have a row height specified, only render what's going to be visible.
-            if (this.props.enableInfiniteScroll && this.props.rowHeight !== null && this.refs.scrollable !== undefined) {
+            if (this.props.enableInfiniteScroll && this.props.rowHeight !== null && scrollable !== undefined) {
                 let adjustedHeight = this.getAdjustedRowHeight();
-                let visibleRecordCount = Math.ceil(this.state.clientHeight / adjustedHeight);
+                let aboveGridContentHeight = this.props.aboveGridContentHeight || 0;
+                let underGridContentHeight = this.props.underGridContentHeight || 0;
+                
+                let dynamicBodyScrollExtraRecords =  (aboveGridContentHeight + underGridContentHeight)/adjustedHeight;
+                let extraRecordsCount = this.state.scrollTop == 0 ? dynamicBodyScrollExtraRecods : (-1* dynamicBodyScrollExtraRecords);
+                
+                let visibleRecordCount = Math.ceil(this.state.clientHeight / adjustedHeight + extraRecordsCount);
 
                 // Inspired by : http://jsfiddle.net/vjeux/KbWJ2/9/
-                let displayStart = Math.max(0, Math.floor(this.state.scrollTop / adjustedHeight) - visibleRecordCount * 0.25);
+                let displayStart = Math.max(0, Math.floor((this.state.scrollTop) / adjustedHeight) - visibleRecordCount * 0.25);
                 let displayEnd = Math.min(displayStart + visibleRecordCount * 1.25, this.props.data.length - 1);
 
                 // Split the amount of nodes.
@@ -97,7 +133,7 @@ class GridTable extends React.Component {
                 // Set the above and below nodes.
                 let aboveSpacerRowStyle = {height: (displayStart * adjustedHeight) + "px"};
                 aboveSpacerRow = (<tr key={'above-' + aboveSpacerRowStyle.height} style={aboveSpacerRowStyle}></tr>);
-                let belowSpacerRowStyle = {height: ((this.props.data.length - displayEnd) * adjustedHeight) + "px"};
+                let belowSpacerRowStyle = {height: ((this.props.data.length - displayEnd) * adjustedHeight) + underGridContentHeight  + "px"};
                 belowSpacerRow = (<tr key={'below-' + belowSpacerRowStyle.height} style={belowSpacerRowStyle}></tr>);
             }
 
@@ -232,7 +268,7 @@ class GridTable extends React.Component {
             // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
             gridStyle = {
                 "position": "relative",
-                "overflowY": "scroll",
+                "overflowY": this.props.bodyScrolling ? "initial" : "scroll",
                 "height": this.props.bodyHeight + "px",
                 "width": "100%"
             };
@@ -296,10 +332,12 @@ class GridTable extends React.Component {
             }
 
             return <div>
-                <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
-                    {tableHeading}
-                </table>
-                <div ref="scrollable" className="griddle-table-wrapper" onScroll={this.gridScroll.bind(this)} style={gridStyle}>
+                <div id={this.gridId + "fixed-header"} className="fixed-header-wrapper">
+                    <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
+                        {tableHeading}
+                    </table>
+                </div>
+                <div ref="scrollable" id={this.gridId + "griddle-table-wrapper"} className="griddle-table-wrapper" onScroll={this.gridScroll.bind(this)} style={gridStyle}>
                     <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
                         {nodes}
                         {loadingContent}
