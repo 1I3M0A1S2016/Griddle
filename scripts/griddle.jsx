@@ -120,13 +120,7 @@ var Griddle = React.createClass({
             "expandedRowsDictionary":undefined,
             "resetToLastPage": false,
             "resetToFirstPage": false,
-	    "gridId": this.props.gridId,
-            "bodyScrolling": this.props.bodyScrolling,
-            "bodyScrollTop": this.props.bodyScrollTop,
-            "bodyClientHeight": this.props.bodyClientHeight,
-            "bodyScrollHeight": this.props.bodyScrollHeight,
-            "aboveGridContentHeight": this.props.aboveGridContentHeight,
-            "underGridContentHeight": this.props.underGridContentHeight
+            "bodyScrolling": false
         };
     },
     propTypes: {
@@ -834,6 +828,13 @@ var Griddle = React.createClass({
                 expandedRowsDictionary={this.props.expandedRowsDictionary}
                 noDataSection={noDataSection}
                 showNoData={showNoData}
+	        gridId = {this.props.gridId}
+                bodyScrolling= {this.props.bodyScrolling}
+                bodyScrollTop= {this.props.bodyScrollTop}
+                bodyClientHeight= {this.props.bodyClientHeight}
+                bodyScrollHeight= {this.props.bodyScrollHeight}
+                aboveGridContentHeight= {this.props.aboveGridContentHeight}
+                underGridContentHeight= {this.props.underGridContentHeight}
         /></div>)
     },
     getContentSection: function(data, cols, meta, pagingContent, hasMorePages, globalData){
