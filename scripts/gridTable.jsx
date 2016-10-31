@@ -119,7 +119,7 @@ class GridTable extends React.Component {
                 let underGridContentHeight = this.props.underGridContentHeight || 0;
                 
                 let dynamicBodyScrollExtraRecords =  (aboveGridContentHeight + underGridContentHeight)/adjustedHeight;
-                let extraRecordsCount = this.state.scrollTop == 0 ? dynamicBodyScrollExtraRecods : (-1* dynamicBodyScrollExtraRecords);
+                let extraRecordsCount = this.state.scrollTop == 0 ? dynamicBodyScrollExtraRecords : (-1* dynamicBodyScrollExtraRecords);
                 
                 let visibleRecordCount = Math.ceil(this.state.clientHeight / adjustedHeight + extraRecordsCount);
 
