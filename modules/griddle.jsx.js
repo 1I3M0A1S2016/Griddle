@@ -133,7 +133,14 @@ var Griddle = React.createClass({
             "rowsExpandedByDefault": true,
             "expandedRowsDictionary": undefined,
             "resetToLastPage": false,
-            "resetToFirstPage": false
+            "resetToFirstPage": false,
+            "gridId": this.props.gridId,
+            "bodyScrolling": this.props.bodyScrolling,
+            "bodyScrollTop": this.props.bodyScrollTop,
+            "bodyClientHeight": this.props.bodyClientHeight,
+            "bodyScrollHeight": this.props.bodyScrollHeight,
+            "aboveGridContentHeight": this.props.aboveGridContentHeight,
+            "underGridContentHeight": this.props.underGridContentHeight
         };
     },
     propTypes: {
