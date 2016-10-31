@@ -42,6 +42,17 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.5.4
+- Wrapped fixed header table in a separate div
+- Added "bodyScrolling" and other related properties to enable infinite scrolling using the window/body scroll. Grid wrapper component should listen to window "scroll" event and pass the following properties, if needed:
+     * bodyScrollTop (mandatory)
+     * bodyClientHeight (mandatory) 
+     * bodyScrollHeight(mandatory)
+     * aboveGridContentHeight (optional)
+     * underGridContentHeight (optional)
+Handling fixed header column and grid row column alignment should be provided externally.
+
+
 0.5.3
 - Moved grid footer outside the table in a separate div
 
