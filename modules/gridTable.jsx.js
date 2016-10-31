@@ -92,6 +92,20 @@ var GridTable = (function (_React$Component) {
             this.gridScroll();
         }
     }, {
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.gridId = (this.props.gridId !== undefined ? this.props.gridId : new Date().getTime()).toString();
+        }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            if (this.props.bodyScrolling) {
+                if (nextProps.bodyHeight !== this.props.bodyHeight || nextProps.bodyScrollTop !== this.props.bodyScrollTop || nextProps.bodyClientHeight !== this.props.bodyClientHeight || nextProps.bodyScrollHeight !== this.props.bodyScrollHeight || nextProps.aboveGridContentHeight !== this.props.aboveGridContentHeight || nextProps.underGridContentHeight !== this.props.underGridContentHeight) {
+                    this.gridScroll(nextProps);
+                }
+            }
+        }
+    }, {
         key: 'componentDidUpdate',
         value: function componentDidUpdate(prevProps, prevState) {
             // After the subsequent renders, see if we need to load additional pages.
@@ -99,13 +113,23 @@ var GridTable = (function (_React$Component) {
         }
     }, {
         key: 'gridScroll',
-        value: function gridScroll() {
+        value: function gridScroll(nextProps) {
             if (this.props.enableInfiniteScroll && !this.props.externalIsLoading) {
                 // If the scroll height is greater than the current amount of rows displayed, update the page.
                 var scrollable = this.refs.scrollable;
-                var scrollTop = scrollable.scrollTop;
-                var scrollHeight = scrollable.scrollHeight;
-                var clientHeight = scrollable.clientHeight;
+                var scrollTop;
+                var scrollHeight;
+                var clientHeight;
+
+                if (this.props.bodyScrolling) {
+                    scrollTop = nextProps ? nextProps.bodyScrollTop : document.documentElement && document.documentElement.scrollTop || document.body.scrollTop || 0;
+                    scrollHeight = nextProps ? nextProps.bodyScrollHeight : document.documentElement && document.documentElement.scrollHeight || document.body.scrollHeight || 0;
+                    clientHeight = nextProps ? nextProps.bodyClientHeight : document.documentElement && document.documentElement.clientHeight || document.body.clientHeight || 0;
+                } else {
+                    scrollTop = scrollable.scrollTop;
+                    scrollHeight = scrollable.scrollHeight;
+                    clientHeight = scrollable.clientHeight;
+                }
 
                 // If the scroll position changed and the difference is greater than a row height
                 if (this.props.rowHeight !== null && this.state.scrollTop !== scrollTop && Math.abs(this.state.scrollTop - scrollTop) >= this.getAdjustedRowHeight()) {
@@ -155,11 +179,18 @@ var GridTable = (function (_React$Component) {
                 //let nodeData = this.props.data;
                 var aboveSpacerRow = null;
                 var belowSpacerRow = null;
+                var scrollable = this.props.bodyScrolling ? document.body : this.refs.scrollable;
 
                 // If we have a row height specified, only render what's going to be visible.
-                if (this.props.enableInfiniteScroll && this.props.rowHeight !== null && this.refs.scrollable !== undefined) {
+                if (this.props.enableInfiniteScroll && this.props.rowHeight !== null && scrollable !== undefined) {
                     var adjustedHeight = this.getAdjustedRowHeight();
-                    var visibleRecordCount = Math.ceil(this.state.clientHeight / adjustedHeight);
+                    var aboveGridContentHeight = this.props.aboveGridContentHeight || 0;
+                    var underGridContentHeight = this.props.underGridContentHeight || 0;
+
+                    var dynamicBodyScrollExtraRecords = (aboveGridContentHeight + underGridContentHeight) / adjustedHeight;
+                    var extraRecordsCount = this.state.scrollTop == 0 ? dynamicBodyScrollExtraRecods : -1 * dynamicBodyScrollExtraRecords;
+
+                    var visibleRecordCount = Math.ceil(this.state.clientHeight / adjustedHeight + extraRecordsCount);
 
                     // Inspired by : http://jsfiddle.net/vjeux/KbWJ2/9/
                     var displayStart = Math.max(0, Math.floor(this.state.scrollTop / adjustedHeight) - visibleRecordCount * 0.25);
@@ -171,7 +202,7 @@ var GridTable = (function (_React$Component) {
                     // Set the above and below nodes.
                     var aboveSpacerRowStyle = { height: displayStart * adjustedHeight + "px" };
                     aboveSpacerRow = _react2['default'].createElement('tr', { key: 'above-' + aboveSpacerRowStyle.height, style: aboveSpacerRowStyle });
-                    var belowSpacerRowStyle = { height: (this.props.data.length - displayEnd) * adjustedHeight + "px" };
+                    var belowSpacerRowStyle = { height: (this.props.data.length - displayEnd) * adjustedHeight + underGridContentHeight + "px" };
                     belowSpacerRow = _react2['default'].createElement('tr', { key: 'below-' + belowSpacerRowStyle.height, style: belowSpacerRowStyle });
                 }
 
@@ -294,7 +325,7 @@ var GridTable = (function (_React$Component) {
                 // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
                 gridStyle = {
                     "position": "relative",
-                    "overflowY": "scroll",
+                    "overflowY": this.props.bodyScrolling ? "initial" : "scroll",
                     "height": this.props.bodyHeight + "px",
                     "width": "100%"
                 };
@@ -345,10 +376,10 @@ var GridTable = (function (_React$Component) {
                     tableStyle.tableLayout = "fixed";
                 }
 
-                return _react2['default'].createElement('div', null, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading), _react2['default'].createElement('div', { ref: 'scrollable', className: 'griddle-table-wrapper', onScroll: this.gridScroll.bind(this), style: gridStyle }, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, nodes, loadingContent)), pagingContent);
+                return _react2['default'].createElement('div', null, _react2['default'].createElement('div', { id: this.gridId + "fixed-header", className: 'fixed-header-wrapper' }, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading)), _react2['default'].createElement('div', { ref: 'scrollable', id: this.gridId + "griddle-table-wrapper", className: 'griddle-table-wrapper', onScroll: this.gridScroll.bind(this), style: gridStyle }, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, nodes, loadingContent)), pagingContent);
             }
 
-            return _react2['default'].createElement('div', null, _react2['default'].createElement('div', { ref: 'scrollable', className: 'griddle-table-wrapper', onScroll: this.gridScroll.bind(this), style: gridStyle }, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading, nodes, loadingContent)), pagingContent);
+            return _react2['default'].createElement('div', null, _react2['default'].createElement('div', { ref: 'scrollable', id: this.gridId + "griddle-table-wrapper", className: 'griddle-table-wrapper', onScroll: this.gridScroll.bind(this), style: gridStyle }, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading, nodes, loadingContent)), pagingContent);
         }
     }]);
 
