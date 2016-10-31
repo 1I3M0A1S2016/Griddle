@@ -126,7 +126,7 @@ var Griddle = React.createClass({
             "bodyClientHeight": this.props.bodyClientHeight,
             "bodyScrollHeight": this.props.bodyScrollHeight,
             "aboveGridContentHeight": this.props.aboveGridContentHeight,
-            "underGridContentHeight": this.props.underGridContentHeight,
+            "underGridContentHeight": this.props.underGridContentHeight
         };
     },
     propTypes: {
