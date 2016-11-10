@@ -835,6 +835,7 @@ var Griddle = React.createClass({
                 bodyScrollHeight= {this.props.bodyScrollHeight}
                 aboveGridContentHeight= {this.props.aboveGridContentHeight}
                 underGridContentHeight= {this.props.underGridContentHeight}
+		maxBodyHeight={this.props.maxBodyHeight}
         /></div>)
     },
     getContentSection: function(data, cols, meta, pagingContent, hasMorePages, globalData){
