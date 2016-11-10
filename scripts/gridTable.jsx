@@ -278,7 +278,7 @@ class GridTable extends React.Component {
             else {
                //height takes priority over maxHeight, we can't have both
                gridStyle.height = this.props.bodyHeight  ? (this.props.bodyHeight + "px") : undefined;
-               gridStyle.maxHeight = gridStyle.height === undefined ? gridStyle.maxHeight : undefined;
+               gridStyle.maxHeight = gridStyle.height === undefined ? this.props.maxBodyHeight : undefined;
             }
         }
 
