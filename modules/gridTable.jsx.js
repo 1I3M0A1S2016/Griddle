@@ -321,14 +321,22 @@ var GridTable = (function (_React$Component) {
                 tableStyle.tableLayout = "fixed";
             }
 
-            if (this.props.enableInfiniteScroll) {
-                // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
+           if (this.props.enableInfiniteScroll ||  this.props.useFixedHeader) {
+                // If we're enabling infinite scrolling or fixed header, we'll want to include the max height of the grid body + allow scrolling.
                 gridStyle = {
                     "position": "relative",
                     "overflowY": this.props.bodyScrolling ? "initial" : "scroll",
-                    "height": this.props.bodyHeight + "px",
                     "width": "100%"
                 };
+                if(this.props.enableInfiniteScroll){
+                  //for infinite scrolling, we only use height
+                  gridStyle.height = this.props.bodyHeight + "px";
+                }
+                else {
+                   //height takes priority over maxHeight, we can't have both
+                   gridStyle.height = this.props.bodyHeight  ? (this.props.bodyHeight + "px") : undefined;
+                   gridStyle.maxHeight = gridStyle.height === undefined ? gridStyle.maxHeight : undefined;
+                }
             }
 
             // If we're currently loading, populate the loading content
@@ -372,11 +380,12 @@ var GridTable = (function (_React$Component) {
 
             // If we have a fixed header, split into two tables.
             if (this.props.useFixedHeader) {
+                var headerWrapperClassName = 'fixed-header-wrapper' + (this.props.enableInfiniteScroll ? " with-infinite-scrolling" : "");
                 if (this.props.useGriddleStyles) {
                     tableStyle.tableLayout = "fixed";
                 }
 
-                return _react2['default'].createElement('div', null, _react2['default'].createElement('div', { id: this.gridId + "fixed-header", className: 'fixed-header-wrapper' }, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading)), _react2['default'].createElement('div', { ref: 'scrollable', id: this.gridId + "griddle-table-wrapper", className: 'griddle-table-wrapper', onScroll: this.gridScroll.bind(this), style: gridStyle }, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, nodes, loadingContent)), pagingContent);
+                return _react2['default'].createElement('div', null, _react2['default'].createElement('div', { id: this.gridId + "fixed-header", className: headerWrapperClassName }, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading)), _react2['default'].createElement('div', { ref: 'scrollable', id: this.gridId + "griddle-table-wrapper", className: 'griddle-table-wrapper', onScroll: this.gridScroll.bind(this), style: gridStyle }, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, nodes, loadingContent)), pagingContent);
             }
 
             return _react2['default'].createElement('div', null, _react2['default'].createElement('div', { ref: 'scrollable', id: this.gridId + "griddle-table-wrapper", className: 'griddle-table-wrapper', onScroll: this.gridScroll.bind(this), style: gridStyle }, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading, nodes, loadingContent)), pagingContent);
