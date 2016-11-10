@@ -42,6 +42,10 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.5.5
+- Fix griddle bug that didn't allow fixed headers without infinite scrolling. Now you can use fixed headers property separated of infinite scrolling.
+- Introduced maxBodyHeight property which works only with fixed headers. Reason for this is sometimes we want the table body not to have a fixed width, but to adapt to the number of rows and scroll only when it overflows. If not specified, the grid "height" property is take into account
+
 0.5.4
 - Wrapped fixed header table in a separate div
 - Added "bodyScrolling" and other related properties to enable infinite scrolling using the window/body scroll. Grid wrapper component should listen to window "scroll" event and pass the following properties, if needed:
