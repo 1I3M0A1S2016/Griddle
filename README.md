@@ -42,6 +42,9 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.5.7
+- state.filteredColumns was not properly synchronized with internal columnSettings.filteredColumns variable. Now it's synced in componentWillReceiveProps. Before this fix, functionality dependend on having list of visible columns in state.filteredColumns was broken.
+
 0.5.6
 - Fix griddle bug that didn't allow fixed headers without infinite scrolling. Now you can use fixed headers property separated of infinite scrolling.
 - Introduced maxBodyHeight property which works only with fixed headers. Reason for this is sometimes we want the table body not to have a fixed width, but to adapt to the number of rows and scroll only when it overflows. If not specified, the grid "height" property is take into account
