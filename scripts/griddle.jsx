@@ -366,6 +366,9 @@ var Griddle = React.createClass({
         if(this.prevColumns.length !== (nextProps.columns || []).length || !_.isEqual(this.prevColumns.sort(),(nextProps.columns || []).sort()))
         {
             this.columnSettings.filteredColumns = (nextProps.columns || []).slice();
+	        this.setState({
+	            filteredColumns: this.columnSettings.filteredColumns
+	        });		
             this.prevColumns = (nextProps.columns || []).slice();
         }
 
