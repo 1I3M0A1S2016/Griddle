@@ -132,9 +132,24 @@ class GridTable extends React.Component {
 
                 // Set the above and below nodes.
                 let aboveSpacerRowStyle = {height: (displayStart * adjustedHeight) + "px"};
-                aboveSpacerRow = (<tr key={'above-' + aboveSpacerRowStyle.height} style={aboveSpacerRowStyle}></tr>);
+             
+             
+               let colNames =  this.props.columnSettings.getColumns();
+               let tds = [];
+               colNames.map(function(col,index){
+                let meta = this.props.columnSettings.getColumnMetadataByName(col);
+                let style = {padding: 0 };
+
+                if(meta.width !== undefined) {
+                 style.width = (typeof(meta.width) === "number"  ? meta.width + "px" : meta.width); 
+                }
+                
+                tds.push(<td className={meta && meta.cssClassName} style={style}></td>);
+               });
+               
+                aboveSpacerRow = (<tr key={'above-' + aboveSpacerRowStyle.height} style={aboveSpacerRowStyle} className="above-space-row">{tds}</tr>);
                 let belowSpacerRowStyle = {height: ((this.props.data.length - displayEnd) * adjustedHeight) + underGridContentHeight  + "px"};
-                belowSpacerRow = (<tr key={'below-' + belowSpacerRowStyle.height} style={belowSpacerRowStyle}></tr>);
+                belowSpacerRow = (<tr key={'below-' + belowSpacerRowStyle.height} style={belowSpacerRowStyle} className="below-space-row"></tr>);
             }
 
             let nodes = nodeData.map((row, index) => {
@@ -181,6 +196,7 @@ class GridTable extends React.Component {
                         multipleSelectionSettings={this.props.multipleSelectionSettings}
                         nestingLevel={nestingLevel}
                         isChildRow={nestingLevel > 0 ? true : false}
+                        rowIndex={index}
                     />
                 );
 
@@ -347,10 +363,14 @@ class GridTable extends React.Component {
                     </table>
                 </div>
                 <div ref="scrollable" id={this.gridId + "griddle-table-wrapper"} className="griddle-table-wrapper" onScroll={this.gridScroll.bind(this)} style={gridStyle}>
-                    <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
+                 <div className="inner-table-wrapper">
+                  <div className="col-resize-indicator-left"></div>
+                   <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
                         {nodes}
                         {loadingContent}
                     </table>
+                  <div className="col-resize-indicator-right"></div>
+                 </div>
                 </div>
                 {pagingContent}
             </div>;
@@ -358,11 +378,15 @@ class GridTable extends React.Component {
 
         return <div>
           <div ref="scrollable" className="griddle-table-wrapper" onScroll={this.gridScroll.bind(this)} style={gridStyle}>
-              <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
-                  {tableHeading}
-                  {nodes}
-                  {loadingContent}
-              </table>
+           <div className="inner-table-wrapper">
+             <div className="col-resize-indicator-left"></div>
+             <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
+                   {tableHeading}
+                   {nodes}
+                   {loadingContent}
+               </table>
+             <div className="col-resize-indicator-right"></div>
+           </div>
           </div>
           {pagingContent}
         </div>;
