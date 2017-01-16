@@ -71,10 +71,12 @@ var GridTitle = React.createClass({
         var that = this;
         var titleStyles = null;
 
-        var nodes = this.props.columnSettings.getColumns().map(function (col, index) {
+         var nodes = this.props.columnSettings.getColumns().map(function (col, index) {
             var columnSort = "";
             var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
+			         var columnWidth = that.props.columnSettings.getMetadataColumnProperty(col, "width");
             var sortComponent = columnIsSortable ? that.props.sortSettings.sortDefaultComponent : null;
+		         	titleStyles = {};
 
             if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending) {
                 columnSort = that.props.sortSettings.sortAscendingClassName;
@@ -101,8 +103,10 @@ var GridTitle = React.createClass({
                     cursor: columnIsSortable ? "pointer" : "default"
                 };
             }
-
-            return React.createElement('th', { onClick: columnIsSortable ? that.sort(col) : null, 'data-title': col, className: columnSort, key: displayName, style: titleStyles }, React.createElement(HeaderComponent, _extends({ columnName: col, displayName: displayName, filterByColumn: that.props.filterByColumn }, headerProps)), sortComponent);
+			
+			         titleStyles.width = (typeof(columnWidth) === "number"  ? columnWidth + "px" : columnWidth);
+			
+            return React.createElement('th', { style: titleStyles, onClick: columnIsSortable ? that.sort(col) : null, 'data-title': col, className: columnSort, key: col + "Header" }, React.createElement(HeaderComponent, _extends({ columnName: col, displayName: displayName, filterByColumn: that.props.filterByColumn }, headerProps)), sortComponent);
         });
 
         if (nodes && this.props.multipleSelectionSettings.isMultipleSelection) {
