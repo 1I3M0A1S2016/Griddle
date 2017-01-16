@@ -58,7 +58,9 @@ var GridTitle = React.createClass({
         var nodes = this.props.columnSettings.getColumns().map(function(col, index){
             var columnSort = "";
             var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
+            var columnWidth = that.props.columnSettings.getMetadataColumnProperty(col, "width");
             var sortComponent = columnIsSortable ? that.props.sortSettings.sortDefaultComponent : null;
+            titleStyles = {};
 
             if(that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending){
                 columnSort = that.props.sortSettings.sortAscendingClassName;
@@ -85,8 +87,9 @@ var GridTitle = React.createClass({
                     cursor: columnIsSortable ? "pointer" : "default"
                 }
             }
-
-            return (<th onClick={columnIsSortable ? that.sort(col) : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>
+            
+            titleStyles.width = (typeof(columnWidth) === "number"  ? columnWidth + "px" : columnWidth);
+            return (<th onClick={columnIsSortable ? that.sort(col) : null} data-title={col} className={columnSort} key={col+"Header"} style={titleStyles}>
                 <HeaderComponent columnName={col} displayName={displayName} filterByColumn={that.props.filterByColumn} {...headerProps}/>
                 {sortComponent}
             </th>);
