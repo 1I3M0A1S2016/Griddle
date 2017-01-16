@@ -258,7 +258,8 @@ var GridTable = (function (_React$Component) {
                         onRowClick: _this.props.onRowClick,
                         multipleSelectionSettings: _this.props.multipleSelectionSettings,
                         nestingLevel: nestingLevel,
-                        isChildRow: nestingLevel > 0 ? true : false
+                        isChildRow: nestingLevel > 0 ? true : false,
+			rowIndex: index
                     }));
 
                     // At least one item in the group has children and row is expanded, continue with rendering of nested rows
