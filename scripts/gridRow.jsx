@@ -98,7 +98,13 @@ class GridRow extends React.Component {
                     </span> : <span style={expanderStyles}></span>;
 
 
-            if (this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined") {
+                 if (this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined") {
+                 // We are using inline withs of the columns only for tables with fixed layout. So, setting the column width only on the first row is enough
+                 // The rows that follow will adjust to the first one's layout
+                if(meta.width !== undefined  && _this.props.rowIndex === 0){
+                 columnStyle = columnStyle || {};
+                 columnStyle.width = (typeof(meta.width) === "number"  ? meta.width + "px" : meta.width); 
+                }
                 let colData = (typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] :
                     <meta.customComponent data={col[1]} rowData={dataView} metadata={meta}/>;
                 returnValue = (meta == null ? returnValue :
