@@ -201,9 +201,27 @@ var GridTable = (function (_React$Component) {
 
                     // Set the above and below nodes.
                     var aboveSpacerRowStyle = { height: displayStart * adjustedHeight + "px" };
-                    aboveSpacerRow = _react2['default'].createElement('tr', { key: 'above-' + aboveSpacerRowStyle.height, style: aboveSpacerRowStyle });
+                    var colNames =  _this.props.columnSettings.getColumns();
+                    var tds = [];
+                    colNames.map(function(col,index){
+                    var meta = _this.props.columnSettings.getColumnMetadataByName(col);
+                    var style = {padding: 0 };
+
+                    if(meta.width !== undefined) {
+                     style.width = (typeof(meta.width) === "number"  ? meta.width + "px" : meta.width); 
+                    }
+
+                    tds.push(_react2['default'].createElement('td', { className: meta && meta.cssClassName, style: style}));
+                   });
+
+                    aboveSpacerRow = _react2['default'].createElement('tr', {
+                     key: 'above-' + aboveSpacerRowStyle.height,
+                     style: aboveSpacerRowStyle,
+                     className: "above-space-row"
+                    },tds);
+					
                     var belowSpacerRowStyle = { height: (this.props.data.length - displayEnd) * adjustedHeight + underGridContentHeight + "px" };
-                    belowSpacerRow = _react2['default'].createElement('tr', { key: 'below-' + belowSpacerRowStyle.height, style: belowSpacerRowStyle });
+                    belowSpacerRow = _react2['default'].createElement('tr', { className: "below-space-row", key: 'below-' + belowSpacerRowStyle.height, style: belowSpacerRowStyle });
                 }
 
                 var nodes = nodeData.map(function (row, index) {
