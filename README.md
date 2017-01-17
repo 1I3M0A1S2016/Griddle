@@ -42,6 +42,11 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.5.8
+- Wrapped the table with another inner wrapper that also contains the resize column indicators (resize of cols implemented outside griddle)
+- Fixed a bug that does not let you have two columns with the same display name (eg: useful when you want to use fake columns)
+- Introduced width property in column metadata. It's only useful when we have fixed table layout, because the column width it's only set for the first row (for fixed layouts, it's enough) - table layout should be set from outside
+
 0.5.7
 - state.filteredColumns was not properly synchronized with internal columnSettings.filteredColumns variable. Now it's synced in componentWillReceiveProps. Before this fix, functionality dependend on having list of visible columns in state.filteredColumns was broken.
 
