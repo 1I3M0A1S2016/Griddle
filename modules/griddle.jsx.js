@@ -808,7 +808,11 @@ var Griddle = React.createClass({
             bodyScrollHeight: this.props.bodyScrollHeight,
             aboveGridContentHeight: this.props.aboveGridContentHeight,
             underGridContentHeight: this.props.underGridContentHeight,
-            maxBodyHeight: this.props.maxBodyHeight
+            maxBodyHeight: this.props.maxBodyHeight,
+	    onRowMouseDown: this.props.onRowMouseDown,
+	    onRowMouseMove: this.props.onRowMouseMove,
+	    onRowMouseOut: this.props.onRowMouseOut,
+	    onRowMouseUp: this.props.onRowMouseUp
         }));
     },
     getContentSection: function getContentSection(data, cols, meta, pagingContent, hasMorePages, globalData) {
