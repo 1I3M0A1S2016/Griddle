@@ -42,6 +42,9 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.5.9
+- added onRowMouseUp, onRowMouseMove, onRowMouseOut, onRowMouseDown events
+
 0.5.8
 - Wrapped the table with another inner wrapper that also contains the resize column indicators (resize of cols implemented outside griddle)
 - Fixed a bug that does not let you have two columns with the same display name (eg: useful when you want to use fake columns)
