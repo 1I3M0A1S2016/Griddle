@@ -197,6 +197,10 @@ class GridTable extends React.Component {
                         nestingLevel={nestingLevel}
                         isChildRow={nestingLevel > 0 ? true : false}
                         rowIndex={index}
+                        onRowMouseDown= {this.props.onRowMouseDown}
+                        onRowMouseMove= {this.props.onRowMouseMove}
+                        onRowMouseOut= {this.props.onRowMouseOut}
+                        onRowMouseUp= {this.props.onRowMouseUp}
                     />
                 );
 
