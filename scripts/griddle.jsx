@@ -839,6 +839,10 @@ var Griddle = React.createClass({
                 aboveGridContentHeight= {this.props.aboveGridContentHeight}
                 underGridContentHeight= {this.props.underGridContentHeight}
 		maxBodyHeight={this.props.maxBodyHeight}
+	        onRowMouseDown={this.props.onRowMouseDown}
+		onRowMouseMove={this.props.onRowMouseMove}
+		onRowMouseOut={this.props.onRowMouseOut}
+		onRowMouseUp={this.props.onRowMouseUp}
         /></div>)
     },
     getContentSection: function(data, cols, meta, pagingContent, hasMorePages, globalData){
