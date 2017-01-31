@@ -10,7 +10,31 @@ class GridRow extends React.Component {
     constructor(props) {
         super(props);
     }
-
+ 
+    handleMouseUp(e) {
+        if (this.props.onRowMouseUp  && _.isFunction(this.props.onRowMouseUp)) {
+            this.props.onRowMouseUp(this, e);
+        }
+    }
+ 
+    handleMouseOut(e) {
+        if (this.props.onRowMouseOut  && _.isFunction(this.props.onRowMouseOut)) {
+            this.props.onRowMouseOut(this, e);
+        }
+    }
+ 
+    handleMouseMove(e) {
+        if (this.props.onRowMouseMove  && _.isFunction(this.props.onRowMouseMove)) {
+            this.props.onRowMouseMove(this, e);
+        }
+    }
+ 
+    handleMouseDown(e) {
+        if (this.props.onRowMouseDown  && _.isFunction(this.props.onRowMouseDown)) {
+            this.props.onRowMouseDown(this, e);
+        }
+    }
+ 
     handleClick(e) {
         if (this.props.onRowClick !== null && _.isFunction(this.props.onRowClick)) {
             this.props.onRowClick(this, e);
@@ -108,11 +132,19 @@ class GridRow extends React.Component {
                 let colData = (typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] :
                     <meta.customComponent data={col[1]} rowData={dataView} metadata={meta}/>;
                 returnValue = (meta == null ? returnValue :
-                    <td onClick={this.handleClick.bind(this)} className={meta.cssClassName} key={index}
+                    <td onMouseUp={this.handleMouseUp.bind(this)} 
+                        onMouseOut={this.handleMouseOut.bind(this)} 
+                        onMouseMove={this.handleMouseMove.bind(this)} 
+                        onMouseDown={this.handleMouseDown.bind(this)} 
+                        onClick={this.handleClick.bind(this)} className={meta.cssClassName} key={index}
                         style={columnStyle}>{colData}</td>);
             }
 
-            return returnValue || (<td onClick={this.handleClick.bind(this)} key={index}
+            return returnValue || (<td onMouseUp={this.handleMouseUp.bind(this)} 
+                                       onMouseOut={this.handleMouseOut.bind(this)} 
+                                       onMouseMove={this.handleMouseMove.bind(this)} 
+                                       onMouseDown={this.handleMouseDown.bind(this)} 
+                                       onClick={this.handleClick.bind(this)} key={index}
                                        style={columnStyle}>{firstColAppend}{col[1]}</td>);
         });
 
