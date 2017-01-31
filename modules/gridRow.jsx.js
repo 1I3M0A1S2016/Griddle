@@ -75,6 +75,34 @@ var GridRow = (function (_React$Component) {
     }
 
     _createClass(GridRow, [{
+        key: 'handleMouseUp',
+        value: function handleMouseUp(e) {
+            if (this.props.onRowMouseUp  && _underscore2['default'].isFunction(this.props.onRowMouseUp)) {
+                this.props.onRowMouseUp(this, e);
+            }
+        }
+    },{
+        key: 'handleMouseOut',
+        value: function handleMouseOut(e) {
+            if (this.props.onRowMouseOut  && _underscore2['default'].isFunction(this.props.onRowMouseOut)) {
+                this.props.onRowMouseOut(this, e);
+            }
+        }
+    },{
+        key: 'handleMouseMove',
+        value: function handleMouseMove(e) {
+            if (this.props.onRowMouseMove  && _underscore2['default'].isFunction(this.props.onRowMouseMove)) {
+                this.props.onRowMouseMove(this, e);
+            }
+        }
+    },{
+        key: 'handleMouseDown',
+        value: function handleMouseDown(e) {
+            if (this.props.onRowMouseDown  && _underscore2['default'].isFunction(this.props.onRowMouseDown)) {
+                this.props.onRowMouseDown(this, e);
+            }
+        }
+    }, {
         key: 'handleClick',
         value: function handleClick(e) {
             if (this.props.onRowClick !== null && _underscore2['default'].isFunction(this.props.onRowClick)) {
@@ -172,7 +200,7 @@ var GridRow = (function (_React$Component) {
                 var firstColAppend = index === 0 && _this.props.hasChildren && _this.props.showChildren === false && _this.props.useGriddleIcons ? _react2['default'].createElement('span', { onClick: _this.handleExpandRows.bind(_this), style: expanderStyles }, _this.props.parentRowCollapsedComponent) : index === 0 && _this.props.hasChildren && _this.props.showChildren && _this.props.useGriddleIcons ? _react2['default'].createElement('span', { onClick: _this.handleExpandRows.bind(_this), style: expanderStyles }, _this.props.parentRowExpandedComponent) : _react2['default'].createElement('span', { style: expanderStyles });
 
                 if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined") {
-                        // We are using inline withs of the columns only for tables with fixed layout. So, setting the column width only on the first row is enough
+                        // We are using inline widths of the columns only for tables with fixed layout. So, setting the column width only on the first row is enough
                         // The rows that follow will adjust to the first one's layout
                   					if(meta.width !== undefined  && _this.props.rowIndex === 0){
                        columnStyle = columnStyle || {};
@@ -180,13 +208,13 @@ var GridRow = (function (_React$Component) {
 					               }
 
                  
-                    var colData = typeof meta.customComponent === 'undefined' || meta.customComponent === null ? col[1] : _react2['default'].createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });
-                    returnValue = meta == null ? returnValue : _react2['default'].createElement('td', { onClick: _this.handleClick.bind(_this), className: meta.cssClassName, key: index,
+                     var colData = typeof meta.customComponent === 'undefined' || meta.customComponent === null ? col[1] : _react2['default'].createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });
+                    returnValue = meta == null ? returnValue : _react2['default'].createElement('td', { onMouseUp: _this.handleMouseUp.bind(_this), onMouseOut: _this.handleMouseOut.bind(_this), onMouseMove: _this.handleMouseMove.bind(_this), onMouseDown: _this.handleMouseDown.bind(_this), onClick: _this.handleClick.bind(_this), className: meta.cssClassName, key: index,
                         style: columnStyle }, colData);
                 }
 
-                return returnValue || _react2['default'].createElement('td', { onClick: _this.handleClick.bind(_this), key: index,
-                    style: columnStyle }, firstColAppend, col[1]);
+                return returnValue || _react2['default'].createElement('td', { onMouseUp: _this.handleMouseUp.bind(_this), onMouseOut: _this.handleMouseOut.bind(_this), onMouseMove: _this.handleMouseMove.bind(_this), onMouseDown: _this.handleMouseDown.bind(_this), onClick: _this.handleClick.bind(_this), className: meta.cssClassName, key: index,
+                        style: columnStyle }, firstColAppend, col[1]);
             });
 
             var columnStyle = this.props.useGriddleStyles ? this._getColumnStyle() : null;
