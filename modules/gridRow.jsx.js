@@ -233,9 +233,9 @@ var GridRow = (function (_React$Component) {
             var className = this.props.rowSettings && this.props.rowSettings.getBodyRowMetadataClass(this.props.data) || "standard-row";
 
             if (this.props.isChildRow) {
-                className = "child-row" + (!this.props.useGriddleStyles ? "-" + this.props.nestingLevel : "");
+                className += " child-row" + (!this.props.useGriddleStyles ? "-" + this.props.nestingLevel : "");
             } else if (this.props.hasChildren) {
-                className = this.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
+                className += (this.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName);
             }
 
             return _react2['default'].createElement('tr', { onClick: this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick.bind(this) : null,
