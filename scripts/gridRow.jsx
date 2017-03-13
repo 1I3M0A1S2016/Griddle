@@ -169,9 +169,9 @@ class GridRow extends React.Component {
         let className = this.props.rowSettings && this.props.rowSettings.getBodyRowMetadataClass(this.props.data) || "standard-row";
 
         if (this.props.isChildRow) {
-            className = "child-row" + (!this.props.useGriddleStyles ?  ("-" +this.props.nestingLevel) : "");
+            className += (" child-row" + (!this.props.useGriddleStyles ?  ("-" +this.props.nestingLevel) : ""));
         } else if (this.props.hasChildren) {
-            className = this.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
+            className += (this.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName);
         }
 
         return (
