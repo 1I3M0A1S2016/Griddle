@@ -42,6 +42,9 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.6.0
+- Assign row class passed via props (in bodyCssClassName) to child rows also (when we render a hierarchical grid)
+
 0.5.9
 - added onRowMouseUp, onRowMouseMove, onRowMouseOut, onRowMouseDown events
 
