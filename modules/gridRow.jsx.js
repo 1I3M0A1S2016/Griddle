@@ -213,7 +213,7 @@ var GridRow = (function (_React$Component) {
                         style: columnStyle }, colData);
                 }
 
-                return returnValue || _react2['default'].createElement('td', { onMouseUp: _this.handleMouseUp.bind(_this), onMouseOut: _this.handleMouseOut.bind(_this), onMouseMove: _this.handleMouseMove.bind(_this), onMouseDown: _this.handleMouseDown.bind(_this), onClick: _this.handleClick.bind(_this), className: meta.cssClassName, key: index,
+                return returnValue || _react2['default'].createElement('td', { onMouseUp: _this.handleMouseUp.bind(_this), onMouseOut: _this.handleMouseOut.bind(_this), onMouseMove: _this.handleMouseMove.bind(_this), onMouseDown: _this.handleMouseDown.bind(_this), onClick: _this.handleClick.bind(_this), className: meta && meta.cssClassName || "", key: index,
                         style: columnStyle }, firstColAppend, col[1]);
             });
 
