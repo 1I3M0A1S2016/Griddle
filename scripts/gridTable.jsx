@@ -219,7 +219,8 @@ class GridTable extends React.Component {
             });
 
             if (this.props.showNoData) {
-                var colSpan = this.props.columnSettings.getVisibleColumnCount();
+                //fix IE bug - it throws exception for colSpan 0
+                var colSpan = this.props.columnSettings.getVisibleColumnCount() || 1;
                 nodes.push(<tr key="no-data-section"><td colSpan={colSpan}>{this.props.noDataSection}</td></tr>);
             }
 
