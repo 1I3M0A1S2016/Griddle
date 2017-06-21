@@ -42,6 +42,10 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+//
+0.6.2
+ - Fix IE bug - it throws exception when now rows are rendered and we try to hide all the columns 
+ 
 0.6.1
  - Fixed a bug that made the grid show all available colums if user hid the last visible column. 
 Now, if no column is selected, the grid renders no rows.
