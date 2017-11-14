@@ -42,7 +42,10 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
-//
+0.6.3
+ - More props are provided to customPagerComponent by default (pageSize, numberOfFilteredResults, numberOfTotalResults)
+ - Ability to override/provide additional customPagerComponent props from Griddle props (via customPagerComponentProps prop)
+
 0.6.2
  - Fix IE bug - it throws exception when now rows are rendered and we try to hide all the columns 
  
