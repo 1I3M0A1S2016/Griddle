@@ -79,6 +79,7 @@ var Griddle = React.createClass({
             "customRowComponent": null,
             "customGridComponent": null,
             "customPagerComponent": {},
+            "customPagerComponentProps": {},
             "customFilterComponent": null,
             "customFilterer": null,
             "globalData": null,
@@ -743,7 +744,14 @@ var Griddle = React.createClass({
             return undefined;
         }
 
-        return React.createElement('div', { className: 'griddle-footer' }, this.props.useCustomPagerComponent ? React.createElement(CustomPaginationContainer, { next: this.nextPage, previous: this.previousPage, currentPage: currentPage, maxPage: maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPagerComponent: this.props.customPagerComponent }) : React.createElement(GridPagination, { useGriddleStyles: this.props.useGriddleStyles, next: this.nextPage, previous: this.previousPage, nextClassName: this.props.nextClassName, nextIconComponent: this.props.nextIconComponent, previousClassName: this.props.previousClassName, previousIconComponent: this.props.previousIconComponent, currentPage: currentPage, maxPage: maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText }));
+        return React.createElement('div', { className: 'griddle-footer' }, this.props.useCustomPagerComponent ? React.createElement(CustomPaginationContainer, { next: this.nextPage, previous: this.previousPage, currentPage: currentPage, maxPage: maxPage,
+            setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText,
+            customPagerComponent: this.props.customPagerComponent, customPagerComponentProps: this.props.customPagerComponentProps,
+            pageSize: this.state.resultsPerPage, numberOfFilteredResults: this.getCurrentResults() && this.getCurrentResults().length || 0,
+            numberOfTotalResults: this.props.results && this.props.results.length || 0 }) : React.createElement(GridPagination, { useGriddleStyles: this.props.useGriddleStyles, next: this.nextPage, previous: this.previousPage, nextClassName: this.props.nextClassName,
+            nextIconComponent: this.props.nextIconComponent, previousClassName: this.props.previousClassName,
+            previousIconComponent: this.props.previousIconComponent, currentPage: currentPage, maxPage: maxPage,
+            setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText }));
     },
     getColumnSelectorSection: function getColumnSelectorSection(keys, cols) {
         return this.state.showColumnChooser ? React.createElement(GridSettings, { columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText,
@@ -809,10 +817,10 @@ var Griddle = React.createClass({
             aboveGridContentHeight: this.props.aboveGridContentHeight,
             underGridContentHeight: this.props.underGridContentHeight,
             maxBodyHeight: this.props.maxBodyHeight,
-	    onRowMouseDown: this.props.onRowMouseDown,
-	    onRowMouseMove: this.props.onRowMouseMove,
-	    onRowMouseOut: this.props.onRowMouseOut,
-	    onRowMouseUp: this.props.onRowMouseUp
+            onRowMouseDown: this.props.onRowMouseDown,
+            onRowMouseMove: this.props.onRowMouseMove,
+            onRowMouseOut: this.props.onRowMouseOut,
+            onRowMouseUp: this.props.onRowMouseUp
         }));
     },
     getContentSection: function getContentSection(data, cols, meta, pagingContent, hasMorePages, globalData) {
