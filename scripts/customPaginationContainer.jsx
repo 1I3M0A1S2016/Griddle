@@ -14,7 +14,11 @@ var CustomPaginationContainer = React.createClass({
       "nextText": "",
       "previousText": "",
       "currentPage": 0,
-      "customPagerComponent": {}
+      "customPagerComponent": {},
+      "customPagerComponentProps": {},
+      "pageSize": 5,
+      "numberOfFilteredResults": 0,
+      "numberOfTotalResults": 0
     }
   },
   render: function() {
@@ -25,7 +29,10 @@ var CustomPaginationContainer = React.createClass({
       return (<div></div>);
     }
 
-    return (<that.props.customPagerComponent maxPage={this.props.maxPage} nextText={this.props.nextText} previousText={this.props.previousText} currentPage={this.props.currentPage} setPage={this.props.setPage} previous={this.props.previous} next={this.props.next} />);
+    return (<that.props.customPagerComponent maxPage={this.props.maxPage} nextText={this.props.nextText} previousText={this.props.previousText} 
+                                             currentPage={this.props.currentPage} setPage={this.props.setPage} previous={this.props.previous} 
+                                             next={this.props.next} pageSize={this.props.pageSize} numberOfFilteredResults={this.props.numberOfFilteredResults}
+                                             numberOfTotalResults={this.props.numberOfTotalResults} {...this.props.customPagerComponentProps}/>);
   }
 });
 
