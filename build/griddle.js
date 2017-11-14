@@ -142,6 +142,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "customRowComponent": null,
 	            "customGridComponent": null,
 	            "customPagerComponent": {},
+	            "customPagerComponentProps": {},			
 	            "customFilterComponent": null,
 	            "customFilterer": null,
 	            "globalData": null,
@@ -807,7 +808,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return undefined;
 	        }
 
-	        return React.createElement('div', { className: 'griddle-footer' }, this.props.useCustomPagerComponent ? React.createElement(CustomPaginationContainer, { next: this.nextPage, previous: this.previousPage, currentPage: currentPage, maxPage: maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPagerComponent: this.props.customPagerComponent }) : React.createElement(GridPagination, { useGriddleStyles: this.props.useGriddleStyles, next: this.nextPage, previous: this.previousPage, nextClassName: this.props.nextClassName, nextIconComponent: this.props.nextIconComponent, previousClassName: this.props.previousClassName, previousIconComponent: this.props.previousIconComponent, currentPage: currentPage, maxPage: maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText }));
+	        return React.createElement('div', { className: 'griddle-footer' }, this.props.useCustomPagerComponent ? React.createElement(CustomPaginationContainer, { next: this.nextPage, previous: this.previousPage, currentPage: currentPage, maxPage: maxPage,
+	            setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText,
+	            customPagerComponent: this.props.customPagerComponent, customPagerComponentProps: this.props.customPagerComponentProps,
+	            pageSize: this.state.resultsPerPage, numberOfFilteredResults: this.getCurrentResults() && this.getCurrentResults().length || 0,
+	            numberOfTotalResults: this.props.results && this.props.results.length || 0 }) : React.createElement(GridPagination, { useGriddleStyles: this.props.useGriddleStyles, next: this.nextPage, previous: this.previousPage, nextClassName: this.props.nextClassName,
+	            nextIconComponent: this.props.nextIconComponent, previousClassName: this.props.previousClassName,
+	            previousIconComponent: this.props.previousIconComponent, currentPage: currentPage, maxPage: maxPage,
+	            setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText }));
 	    },
 	    getColumnSelectorSection: function getColumnSelectorSection(keys, cols) {
 	        return this.state.showColumnChooser ? React.createElement(GridSettings, { columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText,
@@ -2629,6 +2637,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	*/
 	"use strict";
 
+	var _extends = Object.assign || function (target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = arguments[i];for (var key in source) {
+	      if (Object.prototype.hasOwnProperty.call(source, key)) {
+		target[key] = source[key];
+	      }
+	    }
+	  }return target;
+	};	
+	
 	var React = __webpack_require__(2);
 
 	var CustomPaginationContainer = React.createClass({
@@ -2640,7 +2658,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "nextText": "",
 	      "previousText": "",
 	      "currentPage": 0,
-	      "customPagerComponent": {}
+	      "customPagerComponent": {},
+	      "customPagerComponentProps": {},
+	      "pageSize": 5,
+	      "numberOfFilteredResults": 0,
+	      "numberOfTotalResults": 0		    
 	    };
 	  },
 	  render: function render() {
@@ -2651,7 +2673,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return React.createElement("div", null);
 	    }
 
-	    return React.createElement(that.props.customPagerComponent, { maxPage: this.props.maxPage, nextText: this.props.nextText, previousText: this.props.previousText, currentPage: this.props.currentPage, setPage: this.props.setPage, previous: this.props.previous, next: this.props.next });
+	    return React.createElement(that.props.customPagerComponent, _extends({ maxPage: this.props.maxPage, nextText: this.props.nextText, previousText: this.props.previousText,
+	      currentPage: this.props.currentPage, setPage: this.props.setPage, previous: this.props.previous,
+	      next: this.props.next, pageSize: this.props.pageSize, numberOfFilteredResults: this.props.numberOfFilteredResults,
+	      numberOfTotalResults: this.props.numberOfTotalResults }, this.props.customPagerComponentProps));
 	  }
 	});
 
