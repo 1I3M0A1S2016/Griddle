@@ -149,15 +149,9 @@ var GridRow = (function (_React$Component) {
     }, {
         key: 'shouldComponentUpdate',
         value: function shouldComponentUpdate(nextRowProps, nextRowState) {
-            if (this.props.shouldGriddleRowUpdate) {
-                return this.props.shouldGriddleRowUpdate(this.props.data, nextRowProps.data);
-            }
-            return true;
-        }
-    },{
-        key: 'shouldComponentUpdate',
-        value: function shouldComponentUpdate(nextRowProps, nextRowState) {
-            if (this.props.shouldGriddleRowUpdate) {
+	    // always return true for first row in the grid ; first might be the fake row in case we have infinite scrolling, or the first data row in the results
+            // no matter which one, we need it always updated in case we change the columns width outside and we need the first row to adjust the layout for the entire table (with layout = fixed)
+            if (this.props.shouldGriddleRowUpdate && nextRowProps.rowIndex > 0) {
                 return this.props.shouldGriddleRowUpdate(this.props.data, nextRowProps.data);
             }
             return true;
