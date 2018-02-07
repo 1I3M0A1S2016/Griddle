@@ -404,7 +404,7 @@ var GridTable = (function (_React$Component) {
 
             // If we have a fixed header, split into two tables.
             if (this.props.useFixedHeader) {
-                var headerWrapperClassName = 'fixed-header-wrapper' + (this.props.enableInfiniteScroll ? " with-infinite-scrolling" : "");
+                var headerWrapperClassName = 'fixed-header-wrapper' + (this.props.bodyScrolling ? " with-body-scrolling" : "");
                 if (this.props.useGriddleStyles) {
                     tableStyle.tableLayout = "fixed";
                 }
