@@ -354,6 +354,8 @@ class GridTable extends React.Component {
             </div>);
         }
 
+        let innerTableWrapperStyle = this.props.bodyScrolling && !this.props.enableInfiniteScroll && this.props.underGridContentHeight ? {marginBottom: (this.props.underGridContentHeight + "px")} : undefined;
+     
         // If we have a fixed header, split into two tables.
         if (this.props.useFixedHeader) {
             let headerWrapperClassName = 'fixed-header-wrapper' + (this.props.bodyScrolling ? " with-body-scrolling" : "");
@@ -368,7 +370,7 @@ class GridTable extends React.Component {
                     </table>
                 </div>
                 <div ref="scrollable" id={this.gridId + "griddle-table-wrapper"} className="griddle-table-wrapper" onScroll={this.gridScroll.bind(this)} style={gridStyle}>
-                 <div className="inner-table-wrapper">
+                 <div className="inner-table-wrapper" style={innerTableWrapperStyle}>
                   <div className="col-resize-indicator-left"></div>
                    <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
                         {nodes}
@@ -383,7 +385,7 @@ class GridTable extends React.Component {
 
         return <div>
           <div ref="scrollable" className="griddle-table-wrapper" onScroll={this.gridScroll.bind(this)} style={gridStyle}>
-           <div className="inner-table-wrapper">
+           <div className="inner-table-wrapper" style={innerTableWrapperStyle}>
              <div className="col-resize-indicator-left"></div>
              <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
                    {tableHeading}
