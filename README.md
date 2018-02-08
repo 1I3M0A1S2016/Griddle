@@ -41,6 +41,9 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 
 ----------
 ###Changelog:###
+0.6.5
+ - add margin bottom to inner-table-wrapper when having fixed header and we use page(body) scroll
+
 0.6.4
  - remove redundant shouldComponentUpdate function declaration forr gridRow component.
  - always return true for the first row in shouldComponentUpdate of the gridRowComponent.
