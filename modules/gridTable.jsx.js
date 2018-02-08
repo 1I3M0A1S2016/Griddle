@@ -402,6 +402,8 @@ var GridTable = (function (_React$Component) {
                 pagingContent = _react2['default'].createElement('div', { className: 'footer-container', style: pagingStyles }, this.props.pagingContent);
             }
 
+	    var innerTableWrapperStyle = this.props.bodyScrolling && !this.props.enableInfiniteScroll && this.props.underGridContentHeight ? {marginBottom: (this.props.underGridContentHeight + "px")} : undefined;
+		
             // If we have a fixed header, split into two tables.
             if (this.props.useFixedHeader) {
                 var headerWrapperClassName = 'fixed-header-wrapper' + (this.props.bodyScrolling ? " with-body-scrolling" : "");
@@ -410,7 +412,7 @@ var GridTable = (function (_React$Component) {
                 }
 
                 return _react2['default'].createElement('div', null, _react2['default'].createElement('div', { id: this.gridId + "fixed-header", className: headerWrapperClassName }, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading)), _react2['default'].createElement('div', { ref: 'scrollable', id: this.gridId + "griddle-table-wrapper", className: 'griddle-table-wrapper', onScroll: this.gridScroll.bind(this), style: gridStyle }, 
-                _react2["default"].createElement('div',{className: "inner-table-wrapper"},
+                _react2["default"].createElement('div',{className: "inner-table-wrapper", style: innerTableWrapperStyle},
                 _react2['default'].createElement('div', { className: 'col-resize-indicator-left' }),
                 _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, nodes, loadingContent),
                 _react2['default'].createElement('div', { className: 'col-resize-indicator-right' }))), pagingContent);
@@ -418,7 +420,7 @@ var GridTable = (function (_React$Component) {
 
             return _react2['default'].createElement('div', null, _react2['default'].createElement('div', { ref: 'scrollable', id: this.gridId + "griddle-table-wrapper", className: 'griddle-table-wrapper', onScroll: this.gridScroll.bind(this), style: gridStyle
 			}, 
-		_react2['default'].createElement('div',{className: 'inner-table-wrapper'},
+		_react2['default'].createElement('div',{className: 'inner-table-wrapper', style: innerTableWrapperStyle},
             	_react2['default'].createElement('div', { className: 'col-resize-indicator-left' }),
 		_react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading, nodes, loadingContent),
             	_react2['default'].createElement('div', { className: 'col-resize-indicator-right' }))), 
