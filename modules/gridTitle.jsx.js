@@ -98,8 +98,7 @@ var GridTitle = React.createClass({
                     backgroundColor: "#EDEDEF",
                     border: "0",
                     borderBottom: "1px solid #DDD",
-                    color: index == 0 ? "Green" : "#222",
-                    textDecoration: index == 0 ? "underline" : "unset",
+                    color: "#222",
                     padding: "5px",
                     cursor: columnIsSortable ? "pointer" : "default"
                 };
