@@ -369,14 +369,14 @@ var Griddle = React.createClass({
         } else if (this.columnSettings.allColumns.length > 0) {
             this.columnSettings.allColumns = [];
         }
+
         /*Prevent reseting the filtered columns (in grid settings) to the initial ones when setting the state in the parent component of the griddle*/
-	if(this.prevColumns.length !== (nextProps.columns || []).length || !_.isEqual(this.prevColumns.sort(),(nextProps.columns || []).sort()))
-        {
-          this.columnSettings.filteredColumns = (nextProps.columns || []).slice();
-		this.setState({
-		    filteredColumns: this.columnSettings.filteredColumns
-		});		
-          this.prevColumns = (nextProps.columns || []).slice();
+        if (this.prevColumns.length !== (nextProps.columns || []).length || !_.isEqual(this.prevColumns.sort(), (nextProps.columns || []).sort())) {
+            this.columnSettings.filteredColumns = (nextProps.columns || []).slice();
+            this.setState({
+                filteredColumns: this.columnSettings.filteredColumns
+            });
+            this.prevColumns = (nextProps.columns || []).slice();
         }
 
         if (nextProps.selectedRowIds) {
@@ -426,8 +426,8 @@ var Griddle = React.createClass({
             sortAscending: this.props.initialSortAscending
         });
     },
-    componentWillUpdate: function(nextProps, nextState){
-	this.props.onGriddleWillUpdate && this.props.onGriddleWillUpdate((this.state.filteredColumns || []).slice(), nextState.filteredColumns.slice());
+    componentWillUpdate: function componentWillUpdate(nextProps, nextState) {
+        this.props.onGriddleWillUpdate && this.props.onGriddleWillUpdate((this.state.filteredColumns || []).slice(), (nextState.filteredColumns || []).slice());
     },
     componentWillMount: function componentWillMount() {
         this.verifyExternal();

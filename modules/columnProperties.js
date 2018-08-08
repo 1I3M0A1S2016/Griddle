@@ -82,7 +82,7 @@ var ColumnProperties = (function () {
     key: "getColumns",
     value: function getColumns() {
       //if we didn't set default or filter
-      var filteredColumns = this.filteredColumns;
+      var filteredColumns = this.filteredColumns.length === 0 ? this.allColumns : this.filteredColumns;
 
       filteredColumns = _.difference(filteredColumns, this.metadataColumns);
 

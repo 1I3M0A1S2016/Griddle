@@ -41,6 +41,8 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 
 ----------
 ###Changelog:###
+0.6.6
+ - Make the first column header color = green
 0.6.5
  - add margin bottom to inner-table-wrapper when having fixed header and we use page(body) scroll
 

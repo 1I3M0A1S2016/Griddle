@@ -97,6 +97,12 @@ var GridTable = (function (_React$Component) {
             this.gridId = (this.props.gridId !== undefined ? this.props.gridId : new Date().getTime()).toString();
         }
     }, {
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate(prevProps, prevState) {
+            // After the subsequent renders, see if we need to load additional pages.
+            this.gridScroll();
+        }
+    }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(nextProps) {
             if (this.props.bodyScrolling) {
@@ -104,12 +110,6 @@ var GridTable = (function (_React$Component) {
                     this.gridScroll(nextProps);
                 }
             }
-        }
-    }, {
-        key: 'componentDidUpdate',
-        value: function componentDidUpdate(prevProps, prevState) {
-            // After the subsequent renders, see if we need to load additional pages.
-            this.gridScroll();
         }
     }, {
         key: 'gridScroll',
@@ -183,45 +183,43 @@ var GridTable = (function (_React$Component) {
 
                 // If we have a row height specified, only render what's going to be visible.
                 if (this.props.enableInfiniteScroll && this.props.rowHeight !== null && scrollable !== undefined) {
-                    var adjustedHeight = this.getAdjustedRowHeight();
-                    var aboveGridContentHeight = this.props.aboveGridContentHeight || 0;
-                    var underGridContentHeight = this.props.underGridContentHeight || 0;
+                    (function () {
+                        var adjustedHeight = _this.getAdjustedRowHeight();
+                        var aboveGridContentHeight = _this.props.aboveGridContentHeight || 0;
+                        var underGridContentHeight = _this.props.underGridContentHeight || 0;
 
-                    var dynamicBodyScrollExtraRecords = (aboveGridContentHeight + underGridContentHeight) / adjustedHeight;
-                    var extraRecordsCount = this.state.scrollTop == 0 ? dynamicBodyScrollExtraRecords : -1 * dynamicBodyScrollExtraRecords;
+                        var dynamicBodyScrollExtraRecords = (aboveGridContentHeight + underGridContentHeight) / adjustedHeight;
+                        var extraRecordsCount = _this.state.scrollTop == 0 ? dynamicBodyScrollExtraRecords : -1 * dynamicBodyScrollExtraRecords;
 
-                    var visibleRecordCount = Math.ceil(this.state.clientHeight / adjustedHeight + extraRecordsCount);
+                        var visibleRecordCount = Math.ceil(_this.state.clientHeight / adjustedHeight + extraRecordsCount);
 
-                    // Inspired by : http://jsfiddle.net/vjeux/KbWJ2/9/
-                    var displayStart = Math.max(0, Math.floor(this.state.scrollTop / adjustedHeight) - visibleRecordCount * 0.25);
-                    var displayEnd = Math.min(displayStart + visibleRecordCount * 1.25, this.props.data.length - 1);
+                        // Inspired by : http://jsfiddle.net/vjeux/KbWJ2/9/
+                        var displayStart = Math.max(0, Math.floor(_this.state.scrollTop / adjustedHeight) - visibleRecordCount * 0.25);
+                        var displayEnd = Math.min(displayStart + visibleRecordCount * 1.25, _this.props.data.length - 1);
 
-                    // Split the amount of nodes.
-                    nodeData = nodeData.slice(displayStart, displayEnd + 1);
+                        // Split the amount of nodes.
+                        nodeData = nodeData.slice(displayStart, displayEnd + 1);
 
-                    // Set the above and below nodes.
-                    var aboveSpacerRowStyle = { height: displayStart * adjustedHeight + "px" };
-                    var colNames =  _this.props.columnSettings.getColumns();
-                    var tds = [];
-                    colNames.map(function(col,index){
-                    var meta = _this.props.columnSettings.getColumnMetadataByName(col);
-                    var style = {padding: 0 };
+                        // Set the above and below nodes.
+                        var aboveSpacerRowStyle = { height: displayStart * adjustedHeight + "px" };
 
-                    if(meta.width !== undefined) {
-                     style.width = (typeof(meta.width) === "number"  ? meta.width + "px" : meta.width); 
-                    }
+                        var colNames = _this.props.columnSettings.getColumns();
+                        var tds = [];
+                        colNames.map(function (col, index) {
+                            var meta = this.props.columnSettings.getColumnMetadataByName(col);
+                            var style = { padding: 0 };
 
-                    tds.push(_react2['default'].createElement('td', { className: meta && meta.cssClassName, style: style}));
-                   });
+                            if (meta.width !== undefined) {
+                                style.width = typeof meta.width === "number" ? meta.width + "px" : meta.width;
+                            }
 
-                    aboveSpacerRow = _react2['default'].createElement('tr', {
-                     key: 'above-' + aboveSpacerRowStyle.height,
-                     style: aboveSpacerRowStyle,
-                     className: "above-space-row"
-                    },tds);
-					
-                    var belowSpacerRowStyle = { height: (this.props.data.length - displayEnd) * adjustedHeight + underGridContentHeight + "px" };
-                    belowSpacerRow = _react2['default'].createElement('tr', { className: "below-space-row", key: 'below-' + belowSpacerRowStyle.height, style: belowSpacerRowStyle });
+                            tds.push(_react2['default'].createElement('td', { className: meta && meta.cssClassName, style: style }));
+                        });
+
+                        aboveSpacerRow = _react2['default'].createElement('tr', { key: 'above-' + aboveSpacerRowStyle.height, style: aboveSpacerRowStyle, className: 'above-space-row' }, tds);
+                        var belowSpacerRowStyle = { height: (_this.props.data.length - displayEnd) * adjustedHeight + underGridContentHeight + "px" };
+                        belowSpacerRow = _react2['default'].createElement('tr', { key: 'below-' + belowSpacerRowStyle.height, style: belowSpacerRowStyle, className: 'below-space-row' });
+                    })();
                 }
 
                 var nodes = nodeData.map(function (row, index) {
@@ -259,11 +257,11 @@ var GridTable = (function (_React$Component) {
                         multipleSelectionSettings: _this.props.multipleSelectionSettings,
                         nestingLevel: nestingLevel,
                         isChildRow: nestingLevel > 0 ? true : false,
-			rowIndex: index,
-		    	onRowMouseDown: _this.props.onRowMouseDown,
-			onRowMouseMove: _this.props.onRowMouseMove,
-			onRowMouseOut: _this.props.onRowMouseOut,
-			onRowMouseUp: _this.props.onRowMouseUp
+                        rowIndex: index,
+                        onRowMouseDown: _this.props.onRowMouseDown,
+                        onRowMouseMove: _this.props.onRowMouseMove,
+                        onRowMouseOut: _this.props.onRowMouseOut,
+                        onRowMouseUp: _this.props.onRowMouseUp
                     }));
 
                     // At least one item in the group has children and row is expanded, continue with rendering of nested rows
@@ -345,21 +343,20 @@ var GridTable = (function (_React$Component) {
                 tableStyle.tableLayout = "fixed";
             }
 
-           if (this.props.enableInfiniteScroll ||  this.props.useFixedHeader) {
+            if (this.props.enableInfiniteScroll || this.props.useFixedHeader) {
                 // If we're enabling infinite scrolling or fixed header, we'll want to include the max height of the grid body + allow scrolling.
                 gridStyle = {
                     "position": "relative",
                     "overflowY": this.props.bodyScrolling ? "initial" : "scroll",
                     "width": "100%"
                 };
-                if(this.props.enableInfiniteScroll){
-                  //for infinite scrolling, we only use height
-                  gridStyle.height = this.props.bodyHeight + "px";
-                }
-                else {
-                   //height takes priority over maxHeight, we can't have both
-                   gridStyle.height = this.props.bodyHeight  ? (this.props.bodyHeight + "px") : undefined;
-                   gridStyle.maxHeight = gridStyle.height === undefined ? this.props.maxBodyHeight : undefined;
+                if (this.props.enableInfiniteScroll) {
+                    //for infinite scrolling, we only use height
+                    gridStyle.height = this.props.bodyHeight + "px";
+                } else {
+                    //height takes priority over maxHeight, we can't have both
+                    gridStyle.height = this.props.bodyHeight ? this.props.bodyHeight + "px" : undefined;
+                    gridStyle.maxHeight = gridStyle.height === undefined ? this.props.maxBodyHeight : undefined;
                 }
             }
 
@@ -402,8 +399,8 @@ var GridTable = (function (_React$Component) {
                 pagingContent = _react2['default'].createElement('div', { className: 'footer-container', style: pagingStyles }, this.props.pagingContent);
             }
 
-	    var innerTableWrapperStyle = this.props.bodyScrolling && !this.props.enableInfiniteScroll && this.props.underGridContentHeight ? {marginBottom: (this.props.underGridContentHeight + "px")} : undefined;
-		
+            var innerTableWrapperStyle = this.props.bodyScrolling && !this.props.enableInfiniteScroll && this.props.underGridContentHeight ? { marginBottom: this.props.underGridContentHeight + "px" } : undefined;
+
             // If we have a fixed header, split into two tables.
             if (this.props.useFixedHeader) {
                 var headerWrapperClassName = 'fixed-header-wrapper' + (this.props.bodyScrolling ? " with-body-scrolling" : "");
@@ -411,20 +408,10 @@ var GridTable = (function (_React$Component) {
                     tableStyle.tableLayout = "fixed";
                 }
 
-                return _react2['default'].createElement('div', null, _react2['default'].createElement('div', { id: this.gridId + "fixed-header", className: headerWrapperClassName }, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading)), _react2['default'].createElement('div', { ref: 'scrollable', id: this.gridId + "griddle-table-wrapper", className: 'griddle-table-wrapper', onScroll: this.gridScroll.bind(this), style: gridStyle }, 
-                _react2["default"].createElement('div',{className: "inner-table-wrapper", style: innerTableWrapperStyle},
-                _react2['default'].createElement('div', { className: 'col-resize-indicator-left' }),
-                _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, nodes, loadingContent),
-                _react2['default'].createElement('div', { className: 'col-resize-indicator-right' }))), pagingContent);
+                return _react2['default'].createElement('div', null, _react2['default'].createElement('div', { id: this.gridId + "fixed-header", className: headerWrapperClassName }, _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading)), _react2['default'].createElement('div', { ref: 'scrollable', id: this.gridId + "griddle-table-wrapper", className: 'griddle-table-wrapper', onScroll: this.gridScroll.bind(this), style: gridStyle }, _react2['default'].createElement('div', { className: 'inner-table-wrapper', style: innerTableWrapperStyle }, _react2['default'].createElement('div', { className: 'col-resize-indicator-left' }), _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, nodes, loadingContent), _react2['default'].createElement('div', { className: 'col-resize-indicator-right' }))), pagingContent);
             }
 
-            return _react2['default'].createElement('div', null, _react2['default'].createElement('div', { ref: 'scrollable', id: this.gridId + "griddle-table-wrapper", className: 'griddle-table-wrapper', onScroll: this.gridScroll.bind(this), style: gridStyle
-			}, 
-		_react2['default'].createElement('div',{className: 'inner-table-wrapper', style: innerTableWrapperStyle},
-            	_react2['default'].createElement('div', { className: 'col-resize-indicator-left' }),
-		_react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading, nodes, loadingContent),
-            	_react2['default'].createElement('div', { className: 'col-resize-indicator-right' }))), 
-	  pagingContent);
+            return _react2['default'].createElement('div', null, _react2['default'].createElement('div', { ref: 'scrollable', className: 'griddle-table-wrapper', onScroll: this.gridScroll.bind(this), style: gridStyle }, _react2['default'].createElement('div', { className: 'inner-table-wrapper', style: innerTableWrapperStyle }, _react2['default'].createElement('div', { className: 'col-resize-indicator-left' }), _react2['default'].createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading, nodes, loadingContent), _react2['default'].createElement('div', { className: 'col-resize-indicator-right' }))), pagingContent);
         }
     }]);
 
