@@ -121,7 +121,9 @@ var Griddle = React.createClass({
             "expandedRowsDictionary":undefined,
             "resetToLastPage": false,
             "resetToFirstPage": false,
-            "bodyScrolling": false
+            "bodyScrolling": false,
+            "onGridSettingsToggle": null,
+            "onColumnsVisibilityChange": null
         };
     },
     propTypes: {
@@ -243,9 +245,13 @@ var Griddle = React.createClass({
         this.setMaxPage();
     },
     toggleColumnChooser: function(){
+        var nextShowState = !this.state.showColumnChooser;
+        
         this.setState({
-            showColumnChooser: !this.state.showColumnChooser
-        });
+            showColumnChooser: nextShowState
+        }, (function(){
+            this.props.onGridSettingsToggle && this.props.onGridSettingsToggle(nextShowState);
+        }).bind(this));
     },
     toggleCustomComponent: function(){
         if(this.state.customComponentType === "grid"){
@@ -304,10 +310,14 @@ var Griddle = React.createClass({
     },
     setColumns: function(columns){
         this.columnSettings.filteredColumns = _.isArray(columns) ? columns : [columns];
+        var newCols = (this.columnSettings.filteredColumns || []).slice();
+        var oldCols = (this.state.filteredColumns || []).slice();
 
         this.setState({
             filteredColumns: this.columnSettings.filteredColumns
-        });
+        }, (function() {
+            this.props.onColumnsVisibilityChange(oldCols, newCols)
+        }).bind(this));
     },
     nextPage: function() {
         var currentPage = this.getCurrentPage();

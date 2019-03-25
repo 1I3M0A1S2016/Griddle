@@ -41,6 +41,11 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 
 ----------
 ###Changelog:###
+0.6.6
+ - add callbacks for hide/show the settings section & hide/show columns
+ - onGridSettingsToggle: (show: boolean) => void;
+ - onColumnsVisibilityChange: (prevVisibleCols: string[], nextVisibleCols: string[]) => void
+
 0.6.5
  - add margin bottom to inner-table-wrapper when having fixed header and we use page(body) scroll
 
