@@ -104,10 +104,8 @@ class GridTable extends React.Component {
      * @returns {*} Array of rows
      */
     getNodeContent(nodeData, nestingLevel = 0) {
-
         // If the data is still being loaded, don't build the nodes unless this is an infinite scroll table.
         if (!this.props.externalIsLoading || this.props.enableInfiniteScroll) {
-             //let nodeData = this.props.data;
             let aboveSpacerRow = null;
             let belowSpacerRow = null;
             let scrollable = this.props.bodyScrolling  ? document.body : this.refs.scrollable;
@@ -136,14 +134,15 @@ class GridTable extends React.Component {
              
                let colNames =  this.props.columnSettings.getColumns();
                let tds = [];
-               colNames.map(function(col,index){
+
+               colNames.map((col,index) => {
                 let meta = this.props.columnSettings.getColumnMetadataByName(col);
                 let style = {padding: 0 };
 
                 if(meta.width !== undefined) {
                  style.width = (typeof(meta.width) === "number"  ? meta.width + "px" : meta.width); 
                 }
-                
+
                 tds.push(<td className={meta && meta.cssClassName} style={style}></td>);
                });
                
@@ -153,7 +152,6 @@ class GridTable extends React.Component {
             }
 
             let nodes = nodeData.map((row, index) => {
-
                 // array with all nodes and it's children
                 let nodesWithChildren = [];
 
@@ -170,7 +168,7 @@ class GridTable extends React.Component {
 
                 var columns = this.props.columnSettings.getColumns();
 
-                // render rows directly - this could return one row or multiple rows
+                //render rows directly - this could return one row or multiple rows
                 nodesWithChildren.push(
 
                     <this.props.rowSettings.rowComponent

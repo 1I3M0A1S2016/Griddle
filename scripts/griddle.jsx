@@ -246,12 +246,13 @@ var Griddle = React.createClass({
     },
     toggleColumnChooser: function(){
         var nextShowState = !this.state.showColumnChooser;
+        var me = this;
         
         this.setState({
             showColumnChooser: nextShowState
-        }, (function(){
-            this.props.onGridSettingsToggle && this.props.onGridSettingsToggle(nextShowState);
-        }).bind(this));
+        }, function() {
+            me.props.onGridSettingsToggle && me.props.onGridSettingsToggle(nextShowState);
+        });
     },
     toggleCustomComponent: function(){
         if(this.state.customComponentType === "grid"){
@@ -312,12 +313,13 @@ var Griddle = React.createClass({
         this.columnSettings.filteredColumns = _.isArray(columns) ? columns : [columns];
         var newCols = (this.columnSettings.filteredColumns || []).slice();
         var oldCols = (this.state.filteredColumns || []).slice();
+        var me = this;
 
         this.setState({
             filteredColumns: this.columnSettings.filteredColumns
-        }, (function() {
-            this.props.onColumnsVisibilityChange(oldCols, newCols)
-        }).bind(this));
+        }, function() {
+            me.props.onColumnsVisibilityChange && me.props.onColumnsVisibilityChange(oldCols, newCols);
+        });
     },
     nextPage: function() {
         var currentPage = this.getCurrentPage();

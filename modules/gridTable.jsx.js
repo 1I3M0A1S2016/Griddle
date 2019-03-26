@@ -176,7 +176,6 @@ var GridTable = (function (_React$Component) {
 
             // If the data is still being loaded, don't build the nodes unless this is an infinite scroll table.
             if (!this.props.externalIsLoading || this.props.enableInfiniteScroll) {
-                //let nodeData = this.props.data;
                 var aboveSpacerRow = null;
                 var belowSpacerRow = null;
                 var scrollable = this.props.bodyScrolling ? document.body : this.refs.scrollable;
@@ -205,8 +204,9 @@ var GridTable = (function (_React$Component) {
 
                         var colNames = _this.props.columnSettings.getColumns();
                         var tds = [];
+
                         colNames.map(function (col, index) {
-                            var meta = this.props.columnSettings.getColumnMetadataByName(col);
+                            var meta = _this.props.columnSettings.getColumnMetadataByName(col);
                             var style = { padding: 0 };
 
                             if (meta.width !== undefined) {
@@ -223,7 +223,6 @@ var GridTable = (function (_React$Component) {
                 }
 
                 var nodes = nodeData.map(function (row, index) {
-
                     // array with all nodes and it's children
                     var nodesWithChildren = [];
 
@@ -233,7 +232,7 @@ var GridTable = (function (_React$Component) {
 
                     var columns = _this.props.columnSettings.getColumns();
 
-                    // render rows directly - this could return one row or multiple rows
+                    //render rows directly - this could return one row or multiple rows
                     nodesWithChildren.push(_react2['default'].createElement(_this.props.rowSettings.rowComponent, {
                         shouldGriddleRowUpdate: _this.props.shouldGriddleRowUpdate,
                         useGriddleStyles: _this.props.useGriddleStyles,

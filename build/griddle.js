@@ -312,12 +312,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    toggleColumnChooser: function toggleColumnChooser() {
 	        var nextShowState = !this.state.showColumnChooser;
+	        var me = this;
 
 	        this.setState({
 	            showColumnChooser: nextShowState
-	        }, (function () {
-	            this.props.onGridSettingsToggle && this.props.onGridSettingsToggle(nextShowState);
-	        }).bind(this));
+	        }, function () {
+	            me.props.onGridSettingsToggle && me.props.onGridSettingsToggle(nextShowState);
+	        });
 	    },
 	    toggleCustomComponent: function toggleCustomComponent() {
 	        if (this.state.customComponentType === "grid") {
@@ -379,12 +380,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.columnSettings.filteredColumns = _.isArray(columns) ? columns : [columns];
 	        var newCols = (this.columnSettings.filteredColumns || []).slice();
 	        var oldCols = (this.state.filteredColumns || []).slice();
+	        var me = this;
 
 	        this.setState({
 	            filteredColumns: this.columnSettings.filteredColumns
-	        }, (function () {
-	            this.props.onColumnsVisibilityChange(oldCols, newCols);
-	        }).bind(this));
+	        }, function () {
+	            me.props.onColumnsVisibilityChange && me.props.onColumnsVisibilityChange(oldCols, newCols);
+	        });
 	    },
 	    nextPage: function nextPage() {
 	        var currentPage = this.getCurrentPage();
@@ -1156,7 +1158,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            // If the data is still being loaded, don't build the nodes unless this is an infinite scroll table.
 	            if (!this.props.externalIsLoading || this.props.enableInfiniteScroll) {
-	                //let nodeData = this.props.data;
 	                var aboveSpacerRow = null;
 	                var belowSpacerRow = null;
 	                var scrollable = this.props.bodyScrolling ? document.body : this.refs.scrollable;
@@ -1185,8 +1186,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                        var colNames = _this.props.columnSettings.getColumns();
 	                        var tds = [];
+
 	                        colNames.map(function (col, index) {
-	                            var meta = this.props.columnSettings.getColumnMetadataByName(col);
+	                            var meta = _this.props.columnSettings.getColumnMetadataByName(col);
 	                            var style = { padding: 0 };
 
 	                            if (meta.width !== undefined) {
@@ -1203,7 +1205,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 
 	                var nodes = nodeData.map(function (row, index) {
-
 	                    // array with all nodes and it's children
 	                    var nodesWithChildren = [];
 
@@ -1213,7 +1214,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                    var columns = _this.props.columnSettings.getColumns();
 
-	                    // render rows directly - this could return one row or multiple rows
+	                    //render rows directly - this could return one row or multiple rows
 	                    nodesWithChildren.push(_react2['default'].createElement(_this.props.rowSettings.rowComponent, {
 	                        shouldGriddleRowUpdate: _this.props.shouldGriddleRowUpdate,
 	                        useGriddleStyles: _this.props.useGriddleStyles,

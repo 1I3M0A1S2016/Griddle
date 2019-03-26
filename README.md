@@ -41,6 +41,9 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 
 ----------
 ###Changelog:###
+0.6.7
+ - add nullcheck for onGridSettingsToggle property
+
 0.6.6
  - add callbacks for hide/show the settings section & hide/show columns
  - onGridSettingsToggle: (show: boolean) => void;
