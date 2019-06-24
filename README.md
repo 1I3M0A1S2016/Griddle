@@ -41,6 +41,9 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 
 ----------
 ###Changelog:###
+0.6.8
+ - Set grid id to grid table wrapper also in case it is not a fixed header grid.
+
 0.6.7
  - add nullcheck for onGridSettingsToggle property
 
