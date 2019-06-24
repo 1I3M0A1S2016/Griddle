@@ -382,7 +382,7 @@ class GridTable extends React.Component {
         }
 
         return <div>
-          <div ref="scrollable" className="griddle-table-wrapper" onScroll={this.gridScroll.bind(this)} style={gridStyle}>
+          <div ref="scrollable"  id={this.gridId + "griddle-table-wrapper"} className="griddle-table-wrapper" onScroll={this.gridScroll.bind(this)} style={gridStyle}>
            <div className="inner-table-wrapper" style={innerTableWrapperStyle}>
              <div className="col-resize-indicator-left"></div>
              <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
